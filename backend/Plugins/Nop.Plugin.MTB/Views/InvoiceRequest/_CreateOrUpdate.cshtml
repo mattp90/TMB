@@ -1,0 +1,51 @@
+﻿@using Nop.Plugin.MTB.Model.Admin.FileVintage
+@model Nop.Plugin.MTB.Model.Admin.FileVintage.FileVintageUploadModel
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<div class="cards-group">
+    <div class="panel panel-default panel-popup">
+        <div class="panel-body">
+
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <nop-label asp-for="FileId" />
+                </div>
+                <div class="col-sm-9">
+                    <nop-editor asp-for="FileId" asp-required="true" />
+                    <span asp-validation-for="FileId"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <nop-label asp-for="Vintage" />
+                </div>
+                <div class="col-sm-9">
+                    <nop-editor asp-for="Vintage" asp-required="true" />
+                    <span asp-validation-for="Vintage"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <nop-label asp-for="ProductId" />
+                </div>
+                <div class="col-sm-9">
+                    <nop-select asp-for="ProductId" asp-items="Model.AvailableEntities" asp-required="true" />
+                    <span asp-validation-for="Entity"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <nop-label asp-for="LanguageId" />
+                </div>
+                <div class="col-sm-9">
+                    <nop-select asp-for="LanguageId" asp-items="Model.AvailableLanguages" asp-required="true" />
+                    <span asp-validation-for="LanguageId"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
