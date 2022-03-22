@@ -66,6 +66,9 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
                 throw new ArgumentNullException(nameof(item));
             }
 
+            item.CreatedOnUTC = DateTime.Now;
+            item.UpdatedOnUTC = DateTime.Now;
+
             await _invoiceRequestRepository.InsertAsync(item);
         }
 
@@ -76,6 +79,8 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
                 throw new ArgumentNullException(nameof(item));
             }
             
+            item.UpdatedOnUTC = DateTime.Now;
+
             await _invoiceRequestRepository.UpdateAsync(item);
         }
 

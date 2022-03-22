@@ -71,38 +71,7 @@ namespace Nop.Plugin.MTB.Extensions
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
 
-            var result = model.Map<TEntity>();
-
-            Type entityType = typeof(TEntity);
-            
-            // Automatically set Now in property CreatedOnUTC and UpdatedOnUTC
-            if (entityType.GetProperty("CreatedOnUTC") != null)
-            {
-                // Change the instance property value.
-                PropertyInfo piCreatedOnUtc = entityType.GetProperty("CreatedOnUTC");
-                piCreatedOnUtc.SetValue(result, DateTime.Now);
-            }
-            else if (entityType.GetProperty("CreatedOnUtc") != null)
-            {
-                // Change the instance property value.
-                PropertyInfo piCreatedOnUtc = entityType.GetProperty("CreatedOnUtc");
-                piCreatedOnUtc.SetValue(result, DateTime.Now);
-            }
-
-            if (entityType.GetProperty("UpdatedOnUTC") != null)
-            {
-                // Change the instance property value.
-                PropertyInfo piCreatedOnUtc = entityType.GetProperty("UpdatedOnUTC");
-                piCreatedOnUtc.SetValue(result, DateTime.Now);
-            }
-            else if (entityType.GetProperty("UpdatedOnUtc") != null)
-            {
-                // Change the instance property value.
-                PropertyInfo piCreatedOnUtc = entityType.GetProperty("UpdatedOnUtc");
-                piCreatedOnUtc.SetValue(result, DateTime.Now);
-            }
-            
-            return result;
+            return model.Map<TEntity>();
         }
 
         /// <summary>

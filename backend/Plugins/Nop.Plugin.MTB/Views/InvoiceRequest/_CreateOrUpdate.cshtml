@@ -1,5 +1,5 @@
-﻿@using Nop.Plugin.MTB.Model.Admin.FileVintage
-@model Nop.Plugin.MTB.Model.Admin.FileVintage.FileVintageUploadModel
+﻿@using Nop.Plugin.MTB.Model.Admin.InvoiceRequest
+@model Nop.Plugin.MTB.Model.Admin.InvoiceRequest.InvoiceRequestModel
 
 <div asp-validation-summary="All"></div>
 <input asp-for="Id" type="hidden" />
@@ -10,40 +10,46 @@
 
             <div class="form-group row">
                 <div class="col-sm-3">
-                    <nop-label asp-for="FileId" />
+                    <nop-label asp-for="Name" />
                 </div>
                 <div class="col-sm-9">
-                    <nop-editor asp-for="FileId" asp-required="true" />
-                    <span asp-validation-for="FileId"></span>
+                    <nop-editor asp-for="Name" asp-required="true" />
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-sm-3">
-                    <nop-label asp-for="Vintage" />
+                    <nop-label asp-for="Surname" />
                 </div>
                 <div class="col-sm-9">
-                    <nop-editor asp-for="Vintage" asp-required="true" />
-                    <span asp-validation-for="Vintage"></span>
+                    <nop-editor asp-for="Surname" asp-required="true" />
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-sm-3">
-                    <nop-label asp-for="ProductId" />
+                    <nop-label asp-for="BusinessName" />
                 </div>
                 <div class="col-sm-9">
-                    <nop-select asp-for="ProductId" asp-items="Model.AvailableEntities" asp-required="true" />
-                    <span asp-validation-for="Entity"></span>
+                    <nop-editor asp-for="BusinessName" asp-required="true" />
                 </div>
             </div>
+
             <div class="form-group row">
                 <div class="col-sm-3">
-                    <nop-label asp-for="LanguageId" />
+                    <nop-label asp-for="FiscalCode" />
                 </div>
                 <div class="col-sm-9">
-                    <nop-select asp-for="LanguageId" asp-items="Model.AvailableLanguages" asp-required="true" />
-                    <span asp-validation-for="LanguageId"></span>
+                    <nop-editor asp-for="FiscalCode" asp-required="true" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <nop-label asp-for="PEC" />
+                </div>
+                <div class="col-sm-9">
+                    <nop-editor asp-for="PEC" asp-required="true" />
                 </div>
             </div>
         </div>

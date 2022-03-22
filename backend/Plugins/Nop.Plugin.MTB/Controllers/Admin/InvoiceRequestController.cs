@@ -11,6 +11,7 @@ using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Messages;
 using Nop.Web.Framework.Models.Extensions;
+using Nop.Web.Framework.Mvc.Filters;
 
 namespace Nop.Plugin.MTB.Controllers.Admin
 {
@@ -43,6 +44,20 @@ namespace Nop.Plugin.MTB.Controllers.Admin
 
             var model = new InvoiceRequestSearchModel();
             // model.SetGridPageSize();
+            return View(model);
+        }
+
+        public async Task<ActionResult> Edit(int id)
+        {
+            if (!await _permissionService.AuthorizeAsync(PermissionHelper.AccessFileVintageUpload))
+                return Content("Access denied");
+
+            var item = await _invoiceRequestService.GetByIdAsync(id);
+            if (item == null)
+                return RedirectToAction("List");
+
+            var model = item.ToModel<InvoiceRequestModel>();
+
             return View(model);
         }
 
@@ -106,6 +121,35 @@ namespace Nop.Plugin.MTB.Controllers.Admin
 
             return RedirectToAction("List");
             
+        }
+
+        [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        public async Task<ActionResult> Edit(InvoiceRequestModel model, bool continueEditing)
+        {
+            if (!await _permissionService.AuthorizeAsync(PermissionHelper.AccessFileVintageUpload))
+                return Content("Access denied");
+
+            if (ModelState.IsValid)
+            {
+                var item = await _invoiceRequestService.GetByIdAsync(model.Id);
+                if (item == null)
+                    return RedirectToAction("List");
+
+                item = model.ToEntity(item);
+
+                await _invoiceRequestService.UpdateAsync(item);
+
+                //activity log
+                await _customerActivityService.InsertActivityAsync("EditFileVintageUpload",
+                    await _localizationService.GetResourceAsync($"{MTB.PLUGIN_NAME_SPACE}.InvoiceRequest.Updated"), item);
+
+                _notificationService.SuccessNotification(
+                    await _localizationService.GetResourceAsync($"{MTB.PLUGIN_NAME_SPACE}.InvoiceRequest.Updated"));
+
+                return continueEditing ? RedirectToAction("Edit", new { id = item.Id }) : RedirectToAction("List");
+            }
+
+            return View(model);
         }
     }
 } 
