@@ -3,4 +3,3 @@
 3. Publish the "Nop.Web" project from Visual Studio
 
 P.S. When publishing ensure that configuration is set to "Release"
-
