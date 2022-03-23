@@ -10,6 +10,11 @@ namespace Nop.Plugin.MTB.Model.Admin.InvoiceRequest
 {
     public record InvoiceRequestModel : BaseNopEntityModel
     {
+        public InvoiceRequestModel()
+        {
+            InvoiceRequestSearchModel = new InvoiceRequestSearchModel();
+        }
+        
         [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Name")]
         public string Name { get; set; }
         
@@ -45,6 +50,8 @@ namespace Nop.Plugin.MTB.Model.Admin.InvoiceRequest
         
         public InvoiceRequestAddressModel Address { get; set; }
         public List<InvoiceRequestTransitCodeModel> TransitCodesList { get; set; }
+
+        public InvoiceRequestSearchModel InvoiceRequestSearchModel { get; set; }
     }
     
     /// <summary>

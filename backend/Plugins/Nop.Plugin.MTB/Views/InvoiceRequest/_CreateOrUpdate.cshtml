@@ -1,4 +1,7 @@
 ﻿@using Nop.Plugin.MTB.Model.Admin.InvoiceRequest
+@using Nop.Web.Framework.Models.DataTables
+@using Nop.Plugin.MTB
+@using Microsoft.AspNetCore.Routing
 @model Nop.Plugin.MTB.Model.Admin.InvoiceRequest.InvoiceRequestModel
 
 <div asp-validation-summary="All"></div>
@@ -96,6 +99,37 @@
                 </div>
                 <div class="col-sm-9">
                     <nop-editor asp-for="Address.PostalCode" asp-required="true" />
+                </div>
+            </div>
+            
+            <br />
+            
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    @await Html.PartialAsync("Table", new DataTablesModel
+                    {
+                        Name = "invoice-request-grid",
+                        UrlRead = new DataUrl("ListTransitCode", "InvoiceRequest", new RouteValueDictionary { [nameof(Model.Id)] = Model.Id }),
+                        Length = Int32.MaxValue,
+                        ColumnCollection = new List<ColumnProperty>
+                        {
+                            new(nameof(InvoiceRequestTransitCodeModel.Code))
+                            {
+                                Title = T(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.TransitCode").Text,
+                            },
+                            new(nameof(InvoiceRequestTransitCodeModel.InvoiceRequestTransitionCodeStateDescription))
+                            {
+                                Title = T(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.TransitCodeState").Text,
+                            },
+                            new(nameof(InvoiceRequestModel.Id))
+                            {
+                                Title = T("Admin.Common.View").Text,
+                                Width = "100",
+                                ClassName = NopColumnClassDefaults.Button,
+                                Render = new RenderButtonEdit(new DataUrl("Edit"))
+                            }
+                        }
+                   })
                 </div>
             </div>
         </div>

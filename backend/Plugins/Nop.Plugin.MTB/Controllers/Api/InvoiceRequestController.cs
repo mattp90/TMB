@@ -10,6 +10,7 @@ using Nopalm.Controllers.Api;
 using Nop.Plugin.MTB.Extensions;
 using Nop.Plugin.MTB.Helpers;
 using Nop.Plugin.MTB.Model.Admin.InvoiceRequest;
+using Nop.Plugin.MTB.Model.Api;
 
 namespace Nop.Plugin.MTB.Controllers.Api
 {
@@ -54,6 +55,19 @@ namespace Nop.Plugin.MTB.Controllers.Api
                     UpdatedOnUtc = DateTime.Now
                 });
             }
+            
+            return ApiReturn(
+                new ApiError()
+                {
+                    Code = HttpStatusCode.OK,
+                    Message = $"ok"
+                });
+        }
+        
+        [HttpGet, Route("/api/testresponse")]
+        public virtual async Task<IActionResult> TestResponse([FromBody] InvoiceResponseModel model)
+        {
+            var response = model;
             
             return ApiReturn(
                 new ApiError()

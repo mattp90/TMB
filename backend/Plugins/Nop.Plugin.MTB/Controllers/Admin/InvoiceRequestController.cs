@@ -43,7 +43,7 @@ namespace Nop.Plugin.MTB.Controllers.Admin
                 return new UnauthorizedResult();
 
             var model = new InvoiceRequestSearchModel();
-            // model.SetGridPageSize();
+            model.SetGridPageSize();
             return View(model);
         }
 
@@ -59,6 +59,22 @@ namespace Nop.Plugin.MTB.Controllers.Admin
             var gridModel = new InvoiceRequestListModel().PrepareToGrid(model, invoiceRequestItems, () =>
             {
                 return invoiceRequestItems.Select(f => f.ToModel<InvoiceRequestForGridModel>());
+            });            
+
+            return Json(gridModel);
+        }
+        
+        [HttpPost]
+        public virtual async Task<ActionResult> ListTransitCode(InvoiceRequestSearchModel model)
+        {
+            if (!await _permissionService.AuthorizeAsync(PermissionHelper.AccessFileVintageUpload))
+                return new UnauthorizedResult();
+
+            var codes = await _invoiceRequestService.GetTransitionCodesByIdRequestAsync(model.Id);
+            
+            var gridModel = new InvoiceRequestTransitCodeListModel().PrepareToGrid(model, codes, () =>
+            {
+                return codes.Select(f => f.ToModel<InvoiceRequestTransitCodeModel>());
             });            
 
             return Json(gridModel);

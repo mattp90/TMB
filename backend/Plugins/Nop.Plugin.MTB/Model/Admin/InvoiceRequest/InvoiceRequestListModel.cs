@@ -8,4 +8,9 @@ namespace Nop.Plugin.MTB.Model.Admin.InvoiceRequest
     {
 
     }
+    
+    public record InvoiceRequestTransitCodeListModel : BasePagedListModel<InvoiceRequestTransitCodeModel>
+    {
+
+    }
 }

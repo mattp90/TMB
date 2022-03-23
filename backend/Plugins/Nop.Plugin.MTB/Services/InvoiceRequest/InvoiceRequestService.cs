@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using FluentMigrator.Runner.Processors.SqlServer;
 using iTextSharp.text.pdf;
 using Nop.Plugin.MTB.Entity;
 using Org.BouncyCastle.Ocsp;
@@ -65,13 +66,14 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
             return await GetInvoiceRequestDetail(id);
         }
         
-        public virtual async Task<List<InvoiceRequestTransitCode>> GetTransitionCodesByIdRequestAsync(int id)
+        public virtual async Task<IPagedList<InvoiceRequestTransitCode>> GetTransitionCodesByIdRequestAsync(int id)
         {
             var codes = from t in _invoiceRequestTransitCodeRepository.Table
                 where t.InvoiceRequestId == id
                 select t;
 
-            return await codes.ToListAsync();
+            // non ho cazzi di fare la paginazione, tanto non ci saranno richieste con 800mila codici
+            return await codes.ToPagedListAsync(0, Int32.MaxValue);
         }
         
         public virtual async System.Threading.Tasks.Task InsertAsync(Entity.InvoiceRequest item)
