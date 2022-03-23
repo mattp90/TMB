@@ -56,8 +56,14 @@ namespace Nop.Plugin.MTB.Controllers.Admin
             if (item == null)
                 return RedirectToAction("List");
 
+            var address = await _invoiceRequestService.GetAddressByIdRequestAsync(item.Id);
+            var transitionCodes = await _invoiceRequestService.GetTransitionCodesByIdRequestAsync(item.Id);
+            
             var model = item.ToModel<InvoiceRequestModel>();
-
+            model.Address = (await _invoiceRequestService.GetAddressByIdRequestAsync(item.Id))
+                .ToModel<InvoiceRequestAddressModel>();
+            model.TransitCodes = (await _invoiceRequestService.GetTransitionCodesByIdRequestAsync(item.Id)).Select(x => x.Code).ToList();
+            
             return View(model);
         }
 

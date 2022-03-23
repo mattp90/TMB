@@ -3,25 +3,32 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
+using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Plugin.MTB.Model.Admin.InvoiceRequest
 {
     public record InvoiceRequestModel : BaseNopEntityModel
     {
+        [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Name")]
         public string Name { get; set; }
         
+        [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Surname")]
         public string Surname { get; set; }
         
+        [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.BusinessName")]
         [JsonProperty("business_name")]
         public string BusinessName { get; set; }
 
         public InvoiceRequestAddressModel Address { get; set; }
         
+        [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.FiscalCode")]
         [JsonProperty("fiscal_code")]
         public string FiscalCode { get; set; }
         
+        [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.PEC")]
         public string PEC { get; set; }
         
+        [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.TransitCodes")]
         [JsonProperty("transit_codes")]
         public List<string> TransitCodes { get; set; }
         
@@ -31,12 +38,22 @@ namespace Nop.Plugin.MTB.Model.Admin.InvoiceRequest
     
     public record InvoiceRequestAddressModel : BaseNopEntityModel
     {
+        [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.AddressName")]
         [JsonProperty("address")]
         public string AddressName { get; set; }
+        
+        [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.PostalCode")]
         public int PostalCode { get; set; }
+        
+        [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.City")]
         public string City { get; set; }
+        
+        [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Province")]
         public string Province { get; set; }
+        
+        [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Country")]
         public string Country { get; set; }
+        
         public DateTime CreatedOnUTC { get; set; }
         public DateTime UpdatedOnUTC { get; set; }
     }

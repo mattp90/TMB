@@ -43,6 +43,5 @@
   <ItemGroup>
     <Folder Include="Controllers\Api\" />
     <Folder Include="Helpers\Api\Interfaces\" />
-    <Folder Include="Model\Api\Interfaces" />
   </ItemGroup>
 </Project>

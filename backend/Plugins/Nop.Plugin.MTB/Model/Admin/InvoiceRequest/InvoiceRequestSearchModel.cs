@@ -13,7 +13,9 @@ namespace Nop.Plugin.MTB.Model.Admin.InvoiceRequest
         public string SearchSurname { get; set; }
         [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.BusinessName")]
         public string SearchBusinessName { get; set; }
+        [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.FiscalCode")]
         public string SearchFiscalCode { get; set; }
+        [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.PEC")]
         public string SearchPEC { get; set; }
 
         [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.TransitCode")]

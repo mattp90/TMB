@@ -14,6 +14,7 @@ namespace Nop.Plugin.MTB.Data
             CreateMap<InvoiceRequest, InvoiceRequestModel>();
             CreateMap<InvoiceRequestModel, InvoiceRequest>();
             CreateMap<InvoiceRequestAddressModel, InvoiceRequestAddress>();
+            CreateMap<InvoiceRequestAddress, InvoiceRequestAddressModel>();
             CreateMap<InvoiceRequest, InvoiceRequestForGridModel>();
         }
     }

@@ -1,6 +1,8 @@
 ﻿using Nop.Core;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Nop.Plugin.MTB.Entity;
 
 namespace Nop.Plugin.MTB.Services.InvoiceRequest
 {
@@ -12,6 +14,10 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
             int pageSize = Int32.MaxValue, bool noCache = false);
         
         Task<Entity.InvoiceRequest> GetByIdAsync(int id);
+        
+        Task<Entity.InvoiceRequestAddress> GetAddressByIdRequestAsync(int id);
+
+        Task<List<InvoiceRequestTransitCode>> GetTransitionCodesByIdRequestAsync(int id);
         
         Task<Entity.InvoiceRequest> GetDetailByIdAsync(int id);
         

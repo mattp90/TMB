@@ -2,6 +2,7 @@
 using Nop.Core.Caching;
 using Nop.Data;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Nop.Plugin.MTB.Entity;
@@ -52,6 +53,24 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
         public virtual async Task<Entity.InvoiceRequest> GetByIdAsync(int id)
         {
             return await _invoiceRequestRepository.GetByIdAsync(id, cache => default);
+        }
+        
+        public virtual async Task<InvoiceRequestAddress> GetAddressByIdRequestAsync(int id)
+        {
+            var address = from a in _invoiceRequestAddressRepository.Table
+                where a.InvoiceRequestId == id
+                select a;
+
+            return await address.FirstOrDefaultAsync();
+        }
+        
+        public virtual async Task<List<InvoiceRequestTransitCode>> GetTransitionCodesByIdRequestAsync(int id)
+        {
+            var codes = from t in _transitionCodeRepository.Table
+                where t.InvoiceRequestId == id
+                select t;
+
+            return await codes.ToListAsync();
         }
 
         public virtual Task<Entity.InvoiceRequest> GetDetailByIdAsync(int id)
