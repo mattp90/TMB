@@ -50,4 +50,3 @@
     <Compile Remove="Data\AddStateInfoMigration.cs" />
   </ItemGroup>
 </Project>
-
