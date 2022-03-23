@@ -8,6 +8,7 @@ using Nop.Services.Logging;
 using Nopalm;
 using Nopalm.Controllers.Api;
 using Nop.Plugin.MTB.Extensions;
+using Nop.Plugin.MTB.Helpers;
 using Nop.Plugin.MTB.Model.Admin.InvoiceRequest;
 
 namespace Nop.Plugin.MTB.Controllers.Api
@@ -36,11 +37,12 @@ namespace Nop.Plugin.MTB.Controllers.Api
         public virtual async Task<IActionResult> Create([FromBody] InvoiceRequestModel model)
         {
             var entity = model.ToEntity<InvoiceRequest>();
+            entity.InvoiceRequestStateId = (int)InvoiceRequestStateEnum.Pending;
             await _invoiceRequestService.InsertAsync(entity);
             
             var address = model.Address.ToEntity<InvoiceRequestAddress>();
             address.InvoiceRequestId = entity.Id;
-            await _invoiceRequestService.InsertAddress(address);
+            await _invoiceRequestService.InsertAddressAsync(address);
 
             foreach (string transitCode in model.TransitCodes)
             {
@@ -48,8 +50,8 @@ namespace Nop.Plugin.MTB.Controllers.Api
                 {
                     Code = transitCode,
                     InvoiceRequestId = entity.Id,
-                    CreatedOnUTC = DateTime.Now,
-                    UpdatedOnUTC = DateTime.Now
+                    CreatedOnUtc = DateTime.Now,
+                    UpdatedOnUtc = DateTime.Now
                 });
             }
             

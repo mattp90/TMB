@@ -44,4 +44,9 @@
     <Folder Include="Controllers\Api\" />
     <Folder Include="Helpers\Api\Interfaces\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Data\AddDateColumnMigration.cs" />
+    <Compile Remove="Data\AddDeletedColumnMigration.cs" />
+    <Compile Remove="Data\AddStateInfoMigration.cs" />
+  </ItemGroup>
 </Project>

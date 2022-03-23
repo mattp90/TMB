@@ -15,20 +15,18 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
         
         Task<Entity.InvoiceRequest> GetByIdAsync(int id);
         
-        Task<Entity.InvoiceRequestAddress> GetAddressByIdRequestAsync(int id);
-
         Task<List<InvoiceRequestTransitCode>> GetTransitionCodesByIdRequestAsync(int id);
         
         Task<Entity.InvoiceRequest> GetDetailByIdAsync(int id);
         
-        Task InsertAsync(Entity.InvoiceRequest item);
+        System.Threading.Tasks.Task InsertAsync(Entity.InvoiceRequest item);
         
-        Task UpdateAsync(Entity.InvoiceRequest item);
+        System.Threading.Tasks.Task UpdateAsync(Entity.InvoiceRequest item);
         
-        Task DeleteAsync(Entity.InvoiceRequest item);
+        System.Threading.Tasks.Task DeleteAsync(Entity.InvoiceRequest item);
 
-        Task InsertTransitCode(Entity.InvoiceRequestTransitCode item);
+        System.Threading.Tasks.Task InsertTransitCode(InvoiceRequestTransitCode item);
 
-        Task InsertAddress(Entity.InvoiceRequestAddress item);
+        System.Threading.Tasks.Task InsertAddressAsync(InvoiceRequestAddress item);
     }
 }

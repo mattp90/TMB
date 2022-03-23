@@ -31,7 +31,7 @@ namespace Nop.Plugin.MTB
 
         public const string PLUGIN_NAME_SPACE = "Nop.Plugin.MTB";
 
-        public override async Task ManageSiteMapAsync(SiteMapNode rootNode)
+        public override async System.Threading.Tasks.Task ManageSiteMapAsync(SiteMapNode rootNode)
         {
             rootNode.ChildNodes.Add(new SiteMapNode()
             {

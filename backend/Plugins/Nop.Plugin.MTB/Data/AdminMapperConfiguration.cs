@@ -11,11 +11,23 @@ namespace Nop.Plugin.MTB.Data
 
         public AdminMapperConfiguration()
         {
-            CreateMap<InvoiceRequest, InvoiceRequestModel>();
-            CreateMap<InvoiceRequestModel, InvoiceRequest>();
+            CreateMap<InvoiceRequest, InvoiceRequestModel>()
+                .ForMember(
+                        dest => dest.Address,
+                        opt => opt.MapFrom(src => src.InvoiceRequestAddress))
+                .ForMember(
+                    dest => dest.TransitCodesList,
+                    opt => opt.MapFrom(src => src.InvoiceRequestTransitCode));
+                
+                CreateMap<InvoiceRequestModel, InvoiceRequest>();
+                //.ForMember(
+                //    dest => dest.BusinessName,
+                //    opt => opt.MapFrom(src => src.Business_name));
+            
             CreateMap<InvoiceRequestAddressModel, InvoiceRequestAddress>();
             CreateMap<InvoiceRequestAddress, InvoiceRequestAddressModel>();
             CreateMap<InvoiceRequest, InvoiceRequestForGridModel>();
+            CreateMap<InvoiceRequestTransitCode, InvoiceRequestTransitCodeModel>();
         }
     }
 }

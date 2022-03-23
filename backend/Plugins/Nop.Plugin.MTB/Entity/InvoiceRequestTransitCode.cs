@@ -8,7 +8,14 @@ namespace Nop.Plugin.MTB.Entity
     {
         public int InvoiceRequestId { get; set; }
         public string Code { get; set; }
-        public DateTime CreatedOnUTC { get; set; }
-        public DateTime UpdatedOnUTC { get; set; }
+
+        public int? InvoiceRequestTransitionCodeStateId { get; set; }
+
+        public string PdfName { get; set; }
+        public DateTime CreatedOnUtc { get; set; }
+        public DateTime UpdatedOnUtc { get; set; }
+        
+        public virtual InvoiceRequestTransitCodeState InvoiceRequestTransitionCodeState { get; set; }
+        public virtual InvoiceRequest InvoiceRequest { get; set; }
     }
 }

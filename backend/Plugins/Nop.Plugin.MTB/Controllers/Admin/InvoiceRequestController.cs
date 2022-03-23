@@ -47,26 +47,6 @@ namespace Nop.Plugin.MTB.Controllers.Admin
             return View(model);
         }
 
-        public async Task<ActionResult> Edit(int id)
-        {
-            if (!await _permissionService.AuthorizeAsync(PermissionHelper.AccessFileVintageUpload))
-                return Content("Access denied");
-
-            var item = await _invoiceRequestService.GetByIdAsync(id);
-            if (item == null)
-                return RedirectToAction("List");
-
-            var address = await _invoiceRequestService.GetAddressByIdRequestAsync(item.Id);
-            var transitionCodes = await _invoiceRequestService.GetTransitionCodesByIdRequestAsync(item.Id);
-            
-            var model = item.ToModel<InvoiceRequestModel>();
-            model.Address = (await _invoiceRequestService.GetAddressByIdRequestAsync(item.Id))
-                .ToModel<InvoiceRequestAddressModel>();
-            model.TransitCodes = (await _invoiceRequestService.GetTransitionCodesByIdRequestAsync(item.Id)).Select(x => x.Code).ToList();
-            
-            return View(model);
-        }
-
         [HttpPost]
         public virtual async Task<ActionResult> List(InvoiceRequestSearchModel model)
         {
@@ -83,6 +63,22 @@ namespace Nop.Plugin.MTB.Controllers.Admin
 
             return Json(gridModel);
         }
+        
+        public async Task<ActionResult> Edit(int id)
+        {
+            if (!await _permissionService.AuthorizeAsync(PermissionHelper.AccessFileVintageUpload))
+                return Content("Access denied");
+
+            var item = await _invoiceRequestService.GetDetailByIdAsync(id);
+            if (item == null)
+                return RedirectToAction("List");
+
+            var model = item.ToModel<InvoiceRequestModel>();
+            // model.TransitCodes = (await _invoiceRequestService.GetTransitionCodesByIdRequestAsync(item.Id)).Select(x => x.Code).ToList();
+            
+            return View(model);
+        }
+
         
         [HttpPost]
         public virtual async Task<IActionResult> Update(int id)

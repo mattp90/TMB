@@ -9182,6 +9182,15 @@ namespace Nop.Services.Installation
                     Type = "Nop.Services.Directory.UpdateExchangeRateTask, Nop.Services",
                     Enabled = true,
                     StopOnError = false
+                },
+                new ScheduleTask
+                {
+                    Name = "Check invoice request answers",
+                    //60 minutes
+                    Seconds = 3600,
+                    Type = "Nop.Plugin.MTB.Task.CheckInvoiceResponseTask, Nop.Plugin.MTB.Task",
+                    Enabled = true,
+                    StopOnError = false
                 }
             };
 
