@@ -20,8 +20,8 @@ namespace Nop.Plugin.MTB
         ILocalizationService _localizationService;
         IWorkContext _workContext;
 
-        public MTB(ISettingService settingService, IPermissionService permissionService, IWorkContext workContext, 
-            IStoreContext storeContext, IWebHelper webHelper, ILocalizationService localizationService, ILanguageService languageService) 
+        public MTB(ISettingService settingService, IPermissionService permissionService, IWorkContext workContext,
+            IStoreContext storeContext, IWebHelper webHelper, ILocalizationService localizationService, ILanguageService languageService)
             : base(settingService, permissionService, workContext, storeContext, webHelper, localizationService, languageService)
         {
             _permissionService = permissionService;
