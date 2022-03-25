@@ -43,6 +43,8 @@ namespace Nop.Plugin.MTB.Model.Admin.InvoiceRequest
         public DateTime LastUpdate { get; set; }
 
         public int? InvoiceRequestStateId { get; set; }
+        
+        [NopResourceDisplayName(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Status")]
         public string InvoiceRequestStateDescription { get; set; }
 
         public DateTime CreatedOnUtc { get; set; }
@@ -69,6 +71,7 @@ namespace Nop.Plugin.MTB.Model.Admin.InvoiceRequest
         
         public string PEC { get; set; }
 
+        public int? InvoiceRequestStateId { get; set; }
         public string InvoiceRequestStateDescription { get; set; }
     }
 }

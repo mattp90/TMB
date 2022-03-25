@@ -38,7 +38,7 @@ namespace Nop.Plugin.MTB.Controllers.Api
         public virtual async Task<IActionResult> Create([FromBody] InvoiceRequestModel model)
         {
             var entity = model.ToEntity<InvoiceRequest>();
-            entity.InvoiceRequestStateId = (int)InvoiceRequestStateEnum.Pending;
+            // entity.InvoiceRequestStateId = (int)InvoiceRequestStateEnum.Pending;
             await _invoiceRequestService.InsertAsync(entity);
             
             var address = model.Address.ToEntity<InvoiceRequestAddress>();
@@ -65,7 +65,7 @@ namespace Nop.Plugin.MTB.Controllers.Api
         }
         
         [HttpGet, Route("/api/testresponse")]
-        public virtual async Task<IActionResult> TestResponse([FromBody] InvoiceResponseModel model)
+        public virtual IActionResult TestResponse([FromBody] InvoiceResponseModel model)
         {
             var response = model;
             

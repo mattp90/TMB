@@ -2,6 +2,8 @@
 @using Nop.Web.Framework.Models.DataTables
 @using Nop.Plugin.MTB
 @using Microsoft.AspNetCore.Routing
+@using Nop.Plugin.MTB.Entity
+@using Nop.Plugin.MTB.Helpers
 @model Nop.Plugin.MTB.Model.Admin.InvoiceRequest.InvoiceRequestModel
 
 <div asp-validation-summary="All"></div>
@@ -10,126 +12,143 @@
 <div class="cards-group">
     <div class="panel panel-default panel-popup">
         <div class="panel-body">
+            <div class="card">
+                <div class="card-body">
+                    <h4>@T("profile.personalinfo").Text</h4>
+                    <div class="form-group row">
+                        <div class="col-sm-1">
+                            <nop-label asp-for="InvoiceRequestStateDescription"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <b><nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.Failed)" asp-for="InvoiceRequestStateDescription"/></b>
+                        </div>
+                    </div>
+    
+                    <div class="form-group row">
+                        <div class="col-sm-1">
+                            <nop-label asp-for="Name"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.Failed)" asp-for="Name" asp-required="true"/>
+                        </div>
+                    </div>
+    
+                    <div class="form-group row">
+                        <div class="col-sm-1">
+                            <nop-label asp-for="Surname"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.Failed)" asp-for="Surname" asp-required="true"/>
+                        </div>
+                    </div>
+    
+                    <div class="form-group row">
+                        <div class="col-sm-1">
+                            <nop-label asp-for="BusinessName"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.Failed)" asp-for="BusinessName" asp-required="true"/>
+                        </div>
+                    </div>
+    
+                    <div class="form-group row">
+                        <div class="col-sm-1">
+                            <nop-label asp-for="FiscalCode"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.Failed)" asp-for="FiscalCode" asp-required="true"/>
+                        </div>
+                    </div>
+    
+                    <div class="form-group row">
+                        <div class="col-sm-1">
+                            <nop-label asp-for="PEC"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.Failed)" asp-for="PEC" asp-required="true"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <h4>@T(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.AddressName").Text</h4>
+                    <div class="form-group row">
+                        <div class="col-sm-1">
+                            <nop-label asp-for="Address.AddressName"/>
+                        </div>
+                        <div class="col-sm-3">
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.Failed)" asp-for="Address.AddressName" asp-required="true"/>
+                        </div>
+                    </div>
 
-            <div class="form-group row">
-                <div class="col-sm-3">
-                    <nop-label asp-for="Name" />
-                </div>
-                <div class="col-sm-9">
-                    <nop-editor asp-for="Name" asp-required="true" />
-                </div>
-            </div>
+                    <div class="form-group row">
+                        <div class="col-sm-1">
+                            <nop-label asp-for="Address.Country"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.Failed)" asp-for="Address.Country" asp-required="true"/>
+                        </div>
+                    </div>
 
-            <div class="form-group row">
-                <div class="col-sm-3">
-                    <nop-label asp-for="Surname" />
-                </div>
-                <div class="col-sm-9">
-                    <nop-editor asp-for="Surname" asp-required="true" />
-                </div>
-            </div>
+                    <div class="form-group row">
+                        <div class="col-sm-1">
+                            <nop-label asp-for="Address.City"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.Failed)" asp-for="Address.City" asp-required="true"/>
+                        </div>
+                    </div>
 
-            <div class="form-group row">
-                <div class="col-sm-3">
-                    <nop-label asp-for="BusinessName" />
-                </div>
-                <div class="col-sm-9">
-                    <nop-editor asp-for="BusinessName" asp-required="true" />
-                </div>
-            </div>
+                    <div class="form-group row">
+                        <div class="col-sm-1">
+                            <nop-label asp-for="Address.Province"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.Failed)" asp-for="Address.Province" asp-required="true"/>
+                        </div>
+                    </div>
 
-            <div class="form-group row">
-                <div class="col-sm-3">
-                    <nop-label asp-for="FiscalCode" />
-                </div>
-                <div class="col-sm-9">
-                    <nop-editor asp-for="FiscalCode" asp-required="true" />
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-sm-3">
-                    <nop-label asp-for="PEC" />
-                </div>
-                <div class="col-sm-9">
-                    <nop-editor asp-for="PEC" asp-required="true" />
+                    <div class="form-group row">
+                        <div class="col-sm-1">
+                            <nop-label asp-for="Address.PostalCode"/>
+                        </div>
+                        <div class="col-sm-3">
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int) InvoiceRequestStateEnum.Failed)" asp-for="Address.PostalCode" asp-required="true"/>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <h4>Address</h4>
-            <div class="form-group row">
-                <div class="col-sm-3">
-                    <nop-label asp-for="Address.AddressName" />
-                </div>
-                <div class="col-sm-9">
-                    <nop-editor asp-for="Address.AddressName" asp-required="true" />
-                </div>
-            </div>
-            
-            <div class="form-group row">
-                <div class="col-sm-3">
-                    <nop-label asp-for="Address.Country" />
-                </div>
-                <div class="col-sm-9">
-                    <nop-editor asp-for="Address.Country" asp-required="true" />
-                </div>
-            </div>
-            
-            <div class="form-group row">
-                <div class="col-sm-3">
-                    <nop-label asp-for="Address.City" />
-                </div>
-                <div class="col-sm-9">
-                    <nop-editor asp-for="Address.City" asp-required="true" />
-                </div>
-            </div>
-            
-            <div class="form-group row">
-                <div class="col-sm-3">
-                    <nop-label asp-for="Address.Province" />
-                </div>
-                <div class="col-sm-9">
-                    <nop-editor asp-for="Address.Province" asp-required="true" />
-                </div>
-            </div>
-            
-            <div class="form-group row">
-                <div class="col-sm-3">
-                    <nop-label asp-for="Address.PostalCode" />
-                </div>
-                <div class="col-sm-9">
-                    <nop-editor asp-for="Address.PostalCode" asp-required="true" />
-                </div>
-            </div>
-            
-            <br />
-            
-            <div class="form-group row">
-                <div class="col-sm-12">
-                    @await Html.PartialAsync("Table", new DataTablesModel
-                    {
-                        Name = "invoice-request-grid",
-                        UrlRead = new DataUrl("ListTransitCode", "InvoiceRequest", new RouteValueDictionary { [nameof(Model.Id)] = Model.Id }),
-                        Length = Int32.MaxValue,
-                        ColumnCollection = new List<ColumnProperty>
-                        {
-                            new(nameof(InvoiceRequestTransitCodeModel.Code))
+            <div class="card">
+                <div class="card-body">
+                    <h4>@T(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.TransitCode").Text</h4>
+                    
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            @await Html.PartialAsync("Table", new DataTablesModel
                             {
-                                Title = T(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.TransitCode").Text,
-                            },
-                            new(nameof(InvoiceRequestTransitCodeModel.InvoiceRequestTransitionCodeStateDescription))
-                            {
-                                Title = T(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.TransitCodeState").Text,
-                            },
-                            new(nameof(InvoiceRequestModel.Id))
-                            {
-                                Title = T("Admin.Common.View").Text,
-                                Width = "100",
-                                ClassName = NopColumnClassDefaults.Button,
-                                Render = new RenderButtonEdit(new DataUrl("Edit"))
-                            }
-                        }
-                   })
+                                Name = "invoice-request-grid",
+                                UrlRead = new DataUrl("ListTransitCode", "InvoiceRequest", new RouteValueDictionary { [nameof(Model.Id)] = Model.Id }),
+                                Length = Int32.MaxValue,
+                                ColumnCollection = new List<ColumnProperty>
+                                {
+                                    new(nameof(InvoiceRequestTransitCodeModel.Code))
+                                    {
+                                        Title = T(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.TransitCode").Text,
+                                        Editable = true,
+                                        EditType = EditType.String
+                                    },
+                                    new(nameof(InvoiceRequestTransitCodeModel.InvoiceRequestTransitCodeStateDescription))
+                                    {
+                                        Title = T(MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Status").Text,
+                                    }
+                                }
+                            })
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

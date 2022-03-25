@@ -10,6 +10,7 @@ namespace Nop.Plugin.MTB.Data
         {
             table.WithColumn(nameof(InvoiceRequest.InvoiceRequestStateId))
                 .AsInt32()
+                .Nullable()
                 .ForeignKey(nameof(InvoiceRequestState), nameof(InvoiceRequestState.Id))
                 .OnDelete(System.Data.Rule.None)
                 .Indexed();

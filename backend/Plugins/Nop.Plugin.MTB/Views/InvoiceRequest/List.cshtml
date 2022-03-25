@@ -1,6 +1,7 @@
 ﻿@using Nop.Core.Infrastructure
 @using Nop.Web.Framework.Models.DataTables
 @using Nop.Plugin.MTB
+@using Nop.Plugin.MTB.Helpers
 @using Nop.Plugin.MTB.Model.Admin.InvoiceRequest
 @model global::Nop.Plugin.MTB.Model.Admin.InvoiceRequest.InvoiceRequestSearchModel
 
@@ -149,13 +150,13 @@
                                                 Title = T("Admin.Common.View").Text,
                                                 Width = "100",
                                                 ClassName = NopColumnClassDefaults.Button,
-                                                Render = new RenderButtonEdit(new DataUrl("Edit"))
+                                                Render = new RenderCustom("renderColumnEditOrView")
                                             }
                                         },
                                         Length = Model.PageSize,
                                         LengthMenu = Model.AvailablePageSizes
                                         // SearchButtonId = "search-popups",
-                                   })
+                                    })
                                 </div>
                             </div>
                         </div>
@@ -165,3 +166,16 @@
         </div>
     </div>
 </section>
+
+<script>
+    function renderColumnEditOrView(data, type, row, meta) {
+        if (row.InvoiceRequestStateId !== undefined && row.InvoiceRequestStateId === 2)
+        {
+            return '<a href="@Url.Content("~/Admin/InvoiceRequest/Edit/")' + data + '" class="btn btn-default"><i class="fas fa-pencil-alt"></i>@T("Admin.Common.Edit").Text</a>';
+        }
+        else
+        {
+            return '<a href="@Url.Content("~/Admin/InvoiceRequest/Edit/")' + data + '" class="btn btn-default"><i class="far fa-eye"></i>@T("Admin.Common.View").Text</a>';
+        }
+    }
+</script>

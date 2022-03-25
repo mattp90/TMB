@@ -7,7 +7,8 @@ namespace Nop.Plugin.MTB.Model.Admin.InvoiceRequest
     {
         public int InvoiceRequestId { get; set; }
         public string Code { get; set; }
-        public string InvoiceRequestTransitionCodeStateDescription { get; set; }
+        public int? InvoiceRequestTransitCodeStateId { get; set; }
+        public string InvoiceRequestTransitCodeStateDescription { get; set; }
         public string PdfName { get; set; }
         public DateTime CreatedOnUtc { get; set; }
         public DateTime UpdatedOnUtc { get; set; }

@@ -2,7 +2,7 @@
   "Group": "Principal Plugin",
   "FriendlyName": "MTB Plugin",
   "SystemName": "Nop.Plugin.MTB",
-  "Version": "1.10",
+  "Version": "1.12",
   "SupportedVersions": [ "4.40" ],
   "Author": "Matteo Piazzi",
   "DisplayOrder": 1,

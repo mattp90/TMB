@@ -14,7 +14,7 @@ namespace Nop.Plugin.MTB.Data
                 .OnDelete(System.Data.Rule.None)
                 .Indexed();
             
-            table.WithColumn(nameof(InvoiceRequestTransitCode.InvoiceRequestTransitionCodeStateId))
+            table.WithColumn(nameof(InvoiceRequestTransitCode.InvoiceRequestTransitCodeStateId))
                 .AsInt32()
                 .Nullable()
                 .ForeignKey(nameof(InvoiceRequestTransitCodeState), nameof(InvoiceRequestTransitCodeState.Id))

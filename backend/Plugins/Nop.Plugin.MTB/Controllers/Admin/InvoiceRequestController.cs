@@ -70,7 +70,7 @@ namespace Nop.Plugin.MTB.Controllers.Admin
             if (!await _permissionService.AuthorizeAsync(PermissionHelper.AccessFileVintageUpload))
                 return new UnauthorizedResult();
 
-            var codes = await _invoiceRequestService.GetTransitionCodesByIdRequestAsync(model.Id);
+            var codes = await _invoiceRequestService.GetTransitCodesByIdRequestAsync(model.Id);
             
             var gridModel = new InvoiceRequestTransitCodeListModel().PrepareToGrid(model, codes, () =>
             {
@@ -90,11 +90,10 @@ namespace Nop.Plugin.MTB.Controllers.Admin
                 return RedirectToAction("List");
 
             var model = item.ToModel<InvoiceRequestModel>();
-            // model.TransitCodes = (await _invoiceRequestService.GetTransitionCodesByIdRequestAsync(item.Id)).Select(x => x.Code).ToList();
+            // model.TransitCodes = (await _invoiceRequestService.GetTransitCodesByIdRequestAsync(item.Id)).Select(x => x.Code).ToList();
             
             return View(model);
         }
-
         
         [HttpPost]
         public virtual async Task<IActionResult> Update(int id)

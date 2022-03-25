@@ -15,7 +15,7 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
         
         Task<Entity.InvoiceRequest> GetByIdAsync(int id);
         
-        Task<IPagedList<InvoiceRequestTransitCode>> GetTransitionCodesByIdRequestAsync(int id);
+        Task<IPagedList<InvoiceRequestTransitCode>> GetTransitCodesByIdRequestAsync(int id);
         
         Task<Entity.InvoiceRequest> GetDetailByIdAsync(int id);
         

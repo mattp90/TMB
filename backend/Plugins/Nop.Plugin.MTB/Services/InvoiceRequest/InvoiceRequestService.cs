@@ -66,11 +66,23 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
             return await GetInvoiceRequestDetail(id);
         }
         
-        public virtual async Task<IPagedList<InvoiceRequestTransitCode>> GetTransitionCodesByIdRequestAsync(int id)
+        public virtual async Task<IPagedList<InvoiceRequestTransitCode>> GetTransitCodesByIdRequestAsync(int id)
         {
             var codes = from t in _invoiceRequestTransitCodeRepository.Table
+                join states in _invoiceRequestTransitCodeStateRepository.Table on t.InvoiceRequestTransitCodeStateId equals states.Id into CodeStates
+                from state in CodeStates.DefaultIfEmpty()
                 where t.InvoiceRequestId == id
-                select t;
+                select new InvoiceRequestTransitCode()
+                {
+                    Id = t.Id,
+                    Code = t.Code,
+                    PdfName = t.PdfName,
+                    CreatedOnUtc = t.CreatedOnUtc,
+                    InvoiceRequestId = t.InvoiceRequestId,
+                    UpdatedOnUtc = t.UpdatedOnUtc,
+                    InvoiceRequestTransitCodeStateId = t.InvoiceRequestTransitCodeStateId,
+                    InvoiceRequestTransitCodeState = state
+                };
 
             // non ho cazzi di fare la paginazione, tanto non ci saranno richieste con 800mila codici
             return await codes.ToPagedListAsync(0, Int32.MaxValue);
@@ -143,7 +155,9 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
             string searchFiscalCode = "", string searchPEC = "", string searchTransitCode = "", int pageIndex = 0, int pageSize = Int32.MaxValue)
         {
             var query = from p in _invoiceRequestRepository.Table
-                join state in _invoiceRequestStateRepository.Table  on p.InvoiceRequestStateId equals state.Id
+                join states in _invoiceRequestStateRepository.Table  on p.InvoiceRequestStateId equals states.Id 
+                into StatesOfReq
+                from state in StatesOfReq.DefaultIfEmpty()
                 select new Entity.InvoiceRequest()
                 {
                     Id = p.Id,
@@ -161,7 +175,7 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
                     InvoiceRequestStateId = p.InvoiceRequestStateId,
                     InvoiceRequestState = state
                 };
-
+            
             if (invoiceRequestId > 0)
             {
                 query = from p in query 
@@ -217,7 +231,9 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
         private async Task<Entity.InvoiceRequest> GetInvoiceRequestDetail(int id)
         {
             var query = from r in _invoiceRequestRepository.Table
-                join state in _invoiceRequestStateRepository.Table on r.InvoiceRequestStateId equals state.Id
+                join states in _invoiceRequestStateRepository.Table  on r.InvoiceRequestStateId equals states.Id 
+                into StatesOfReq
+                from state in StatesOfReq.DefaultIfEmpty()
                 where r.Id == id
                 select new Entity.InvoiceRequest()
                 {   
@@ -245,20 +261,22 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
                     where a.InvoiceRequestId == invoiceRequest.Id
                     select a).FirstOrDefaultAsync();
 
-                invoiceRequest.InvoiceRequestTransitCode = await (from c in _invoiceRequestTransitCodeRepository.Table
-                    where c.InvoiceRequestId == invoiceRequest.Id
-                    select new InvoiceRequestTransitCode()
-                    {
-                        Id = c.Id,
-                        Code = c.Code,
-                        PdfName = c.PdfName,
-                        CreatedOnUtc = c.CreatedOnUtc,
-                        InvoiceRequestId = c.InvoiceRequestId,
-                        UpdatedOnUtc = c.UpdatedOnUtc,
-                        InvoiceRequestTransitionCodeStateId = c.InvoiceRequestTransitionCodeStateId,
-                        // InvoiceRequestTransitionCodeState = state
-                    }).ToListAsync();
-
+                // invoiceRequest.InvoiceRequestTransitCode = await (from c in _invoiceRequestTransitCodeRepository.Table
+                //     join states in _invoiceRequestTransitCodeStateRepository.Table on c.InvoiceRequestTransitCodeStateId equals states.Id into CodeStates
+                //     from state in CodeStates.DefaultIfEmpty()
+                //     where c.InvoiceRequestId == invoiceRequest.Id
+                //     select new InvoiceRequestTransitCode()
+                //     {
+                //         Id = c.Id,
+                //         Code = c.Code,
+                //         PdfName = c.PdfName,
+                //         CreatedOnUtc = c.CreatedOnUtc,
+                //         InvoiceRequestId = c.InvoiceRequestId,
+                //         UpdatedOnUtc = c.UpdatedOnUtc,
+                //         InvoiceRequestTransitCodeStateId = c.InvoiceRequestTransitCodeStateId,
+                //         InvoiceRequestTransitCodeState = state
+                //     }).ToListAsync();
+                
                 return invoiceRequest;
             }
             else

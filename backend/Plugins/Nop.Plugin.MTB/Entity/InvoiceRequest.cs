@@ -19,7 +19,7 @@ namespace Nop.Plugin.MTB.Entity
         public string PEC { get; set; }
         public bool Deleted { get; set; }
 
-        public int InvoiceRequestStateId { get; set; }
+        public int? InvoiceRequestStateId { get; set; }
 
         public DateTime? RequestDate { get; set; }
 
