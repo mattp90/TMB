@@ -21,6 +21,7 @@ namespace Nop.Plugin.MTB.Data
             _migrationManager.BuildTable<InvoiceRequest>(Create);
             _migrationManager.BuildTable<InvoiceRequestAddress>(Create);
             _migrationManager.BuildTable<InvoiceRequestTransitCode>(Create);
+            _migrationManager.BuildTable<InvoiceRequestFiscalId>(Create);
         }
     }
 }

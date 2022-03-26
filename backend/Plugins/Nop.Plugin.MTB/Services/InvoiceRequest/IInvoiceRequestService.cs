@@ -14,19 +14,29 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
             int pageSize = Int32.MaxValue, bool noCache = false);
         
         Task<Entity.InvoiceRequest> GetByIdAsync(int id);
+
+        Task<Entity.InvoiceRequest> GetByGuidAsync(Guid guid);
         
         Task<IPagedList<InvoiceRequestTransitCode>> GetTransitCodesByIdRequestAsync(int id);
+
+        Task<InvoiceRequestTransitCode> GetTransitCodesByRequestIdAndCode(int id, string code);
         
         Task<Entity.InvoiceRequest> GetDetailByIdAsync(int id);
-        
-        System.Threading.Tasks.Task InsertAsync(Entity.InvoiceRequest item);
-        
-        System.Threading.Tasks.Task UpdateAsync(Entity.InvoiceRequest item);
-        
-        System.Threading.Tasks.Task DeleteAsync(Entity.InvoiceRequest item);
 
-        System.Threading.Tasks.Task InsertTransitCode(InvoiceRequestTransitCode item);
+        Task<Entity.InvoiceRequest> GetDetailByGuidAsync(string guid);
+
+        System.Threading.Tasks.Task InsertAsync(Entity.InvoiceRequest item);
 
         System.Threading.Tasks.Task InsertAddressAsync(InvoiceRequestAddress item);
+        
+        System.Threading.Tasks.Task InsertFiscalIdAsync(InvoiceRequestFiscalId item);
+        
+        System.Threading.Tasks.Task InsertTransitCode(InvoiceRequestTransitCode item);
+
+        System.Threading.Tasks.Task UpdateAsync(Entity.InvoiceRequest item);
+
+        System.Threading.Tasks.Task UpdateTransitCodeAsync(InvoiceRequestTransitCode item);
+        
+        System.Threading.Tasks.Task DeleteAsync(Entity.InvoiceRequest item);
     }
 }

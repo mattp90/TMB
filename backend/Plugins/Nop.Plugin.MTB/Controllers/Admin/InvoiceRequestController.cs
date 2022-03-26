@@ -5,6 +5,7 @@ using Nop.Plugin.MTB.Model.Admin.InvoiceRequest;
 using Nop.Services.Security;
 using Nop.Web.Areas.Admin.Controllers;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Nop.Plugin.MTB.Extensions;
 using Nop.Plugin.MTB.Services.InvoiceRequest;
 using Nop.Services.Localization;
@@ -94,27 +95,40 @@ namespace Nop.Plugin.MTB.Controllers.Admin
             
             return View(model);
         }
+
+        #region POST METHODS
         
-        [HttpPost]
-        public virtual async Task<IActionResult> Update(int id)
+        [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        public async Task<ActionResult> Edit(InvoiceRequestModel model, bool continueEditing)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-                return AccessDeniedView();
+            if (!await _permissionService.AuthorizeAsync(PermissionHelper.AccessFileVintageUpload))
+                return Content("Access denied");
 
-            //try to get a blog post with the specified id
-            var invoiceRequest = await _invoiceRequestService.GetByIdAsync(id);
-            if (invoiceRequest == null)
-                return RedirectToAction("List");
+            if (ModelState.IsValid)
+            {
+                var item = await _invoiceRequestService.GetByIdAsync(model.Id);
+                if (item == null)
+                    return RedirectToAction("List");
 
-            await _invoiceRequestService.UpdateAsync(invoiceRequest);
+                item = model.ToEntity(item);
+                await _invoiceRequestService.UpdateAsync(item);
 
-            //activity log
-            await _customerActivityService.InsertActivityAsync("UpdateInvoiceRequest",
-                string.Format(await _localizationService.GetResourceAsync("ActivityLog.UpdateInvoiceRequest"), invoiceRequest.Id), invoiceRequest);
+                //activity log
+                await _customerActivityService.InsertActivityAsync("EditFileVintageUpload",
+                    await _localizationService.GetResourceAsync($"{MTB.PLUGIN_NAME_SPACE}.InvoiceRequest.Updated"), item);
 
-            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.ContentManagement.InvoiceRequest.Updated"));
+                _notificationService.SuccessNotification(
+                    await _localizationService.GetResourceAsync($"{MTB.PLUGIN_NAME_SPACE}.InvoiceRequest.Updated"));
 
-            return RedirectToAction("List");
+                // Generate JSon to send in FTP folder requests
+                var codes = await _invoiceRequestService.GetTransitCodesByIdRequestAsync(item.Id);
+                model.TransitCodes = codes.Select(x => x.Code).ToList();
+                var jsonContent = JsonConvert.SerializeObject(model);
+
+                return continueEditing ? RedirectToAction("Edit", new { id = item.Id }) : RedirectToAction("List");
+            }
+
+            return View(model);
         }
         
         [HttpPost]
@@ -139,34 +153,7 @@ namespace Nop.Plugin.MTB.Controllers.Admin
             return RedirectToAction("List");
             
         }
-
-        [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public async Task<ActionResult> Edit(InvoiceRequestModel model, bool continueEditing)
-        {
-            if (!await _permissionService.AuthorizeAsync(PermissionHelper.AccessFileVintageUpload))
-                return Content("Access denied");
-
-            if (ModelState.IsValid)
-            {
-                var item = await _invoiceRequestService.GetByIdAsync(model.Id);
-                if (item == null)
-                    return RedirectToAction("List");
-
-                item = model.ToEntity(item);
-
-                await _invoiceRequestService.UpdateAsync(item);
-
-                //activity log
-                await _customerActivityService.InsertActivityAsync("EditFileVintageUpload",
-                    await _localizationService.GetResourceAsync($"{MTB.PLUGIN_NAME_SPACE}.InvoiceRequest.Updated"), item);
-
-                _notificationService.SuccessNotification(
-                    await _localizationService.GetResourceAsync($"{MTB.PLUGIN_NAME_SPACE}.InvoiceRequest.Updated"));
-
-                return continueEditing ? RedirectToAction("Edit", new { id = item.Id }) : RedirectToAction("List");
-            }
-
-            return View(model);
-        }
+        
+        #endregion
     }
 }

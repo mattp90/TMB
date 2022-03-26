@@ -19,12 +19,13 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
         private readonly IRepository<InvoiceRequestState> _invoiceRequestStateRepository;
         private readonly IRepository<InvoiceRequestTransitCode> _invoiceRequestTransitCodeRepository;
         private readonly IRepository<InvoiceRequestTransitCodeState> _invoiceRequestTransitCodeStateRepository;
+        private readonly IRepository<InvoiceRequestFiscalId> _invoiceRequestFiscalIdRepository;
         private readonly IStaticCacheManager _cacheManager;
 
         private const string InvoiceRequestItemAll = MTB.PLUGIN_NAME_SPACE + ".InvoiceRequest.all";
 
         public InvoiceRequestService(IRepository<Entity.InvoiceRequest> invoiceRequestRepository, IStaticCacheManager cacheManager, 
-            IRepository<InvoiceRequestAddress> invoiceRequestAddressRepository, IRepository<InvoiceRequestState> invoiceRequestStateRepository, IRepository<InvoiceRequestTransitCode> invoiceRequestTransitCodeRepository, IRepository<InvoiceRequestTransitCodeState> invoiceRequestTransitCodeStateRepository)
+            IRepository<InvoiceRequestAddress> invoiceRequestAddressRepository, IRepository<InvoiceRequestState> invoiceRequestStateRepository, IRepository<InvoiceRequestTransitCode> invoiceRequestTransitCodeRepository, IRepository<InvoiceRequestTransitCodeState> invoiceRequestTransitCodeStateRepository, IRepository<InvoiceRequestFiscalId> invoiceRequestFiscalIdRepository)
         {
             _invoiceRequestRepository = invoiceRequestRepository;
             _cacheManager = cacheManager;
@@ -32,6 +33,7 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
             _invoiceRequestStateRepository = invoiceRequestStateRepository;
             _invoiceRequestTransitCodeRepository = invoiceRequestTransitCodeRepository;
             _invoiceRequestTransitCodeStateRepository = invoiceRequestTransitCodeStateRepository;
+            _invoiceRequestFiscalIdRepository = invoiceRequestFiscalIdRepository;
         }
 
         public async Task<IPagedList<Entity.InvoiceRequest>> GetAllAsync(int invoiceRequestId = 0, string searchName = "", string searchSurname = "", string searchBusinessName = "",
@@ -61,11 +63,25 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
             return await _invoiceRequestRepository.GetByIdAsync(id, cache => default);
         }
         
+        public virtual async Task<Entity.InvoiceRequest> GetByGuidAsync(Guid guid)
+        {
+            var item = from r in _invoiceRequestRepository.Table
+                where r.GuidId == guid
+                select r;
+
+            return await item.FirstOrDefaultAsync();
+        }
+        
         public virtual async Task<Entity.InvoiceRequest> GetDetailByIdAsync(int id)
         {
             return await GetInvoiceRequestDetail(id);
         }
         
+        public virtual async Task<Entity.InvoiceRequest> GetDetailByGuidAsync(string guid)
+        {
+            return await GetInvoiceRequestDetailByGuid(guid);
+        }
+
         public virtual async Task<IPagedList<InvoiceRequestTransitCode>> GetTransitCodesByIdRequestAsync(int id)
         {
             var codes = from t in _invoiceRequestTransitCodeRepository.Table
@@ -86,6 +102,13 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
 
             // non ho cazzi di fare la paginazione, tanto non ci saranno richieste con 800mila codici
             return await codes.ToPagedListAsync(0, Int32.MaxValue);
+        }
+        
+        public virtual async Task<InvoiceRequestTransitCode> GetTransitCodesByRequestIdAndCode(int id, string code)
+        {
+            return await (from t in _invoiceRequestTransitCodeRepository.Table
+                where (t.InvoiceRequestId == id && t.Code == code) 
+                select t).FirstOrDefaultAsync();
         }
         
         public virtual async System.Threading.Tasks.Task InsertAsync(Entity.InvoiceRequest item)
@@ -111,6 +134,30 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
             item.UpdatedOnUtc = DateTime.Now;
 
             await _invoiceRequestRepository.UpdateAsync(item);
+
+            if (item.InvoiceRequestAddress != null)
+            {
+                item.InvoiceRequestAddress.UpdatedOnUtc = DateTime.Now;
+                await _invoiceRequestAddressRepository.UpdateAsync(item.InvoiceRequestAddress);    
+            }
+
+            if (item.InvoiceRequestFiscalId != null)
+            {
+                item.InvoiceRequestFiscalId.UpdatedOnUtc = DateTime.Now;
+                await _invoiceRequestFiscalIdRepository.UpdateAsync(item.InvoiceRequestFiscalId);    
+            }
+        }
+        
+        public virtual async System.Threading.Tasks.Task UpdateTransitCodeAsync(InvoiceRequestTransitCode item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+            
+            item.UpdatedOnUtc = DateTime.Now;
+
+            await _invoiceRequestTransitCodeRepository.UpdateAsync(item);
         }
 
         public virtual async System.Threading.Tasks.Task DeleteAsync(Entity.InvoiceRequest item)
@@ -134,6 +181,19 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
             item.UpdatedOnUtc = DateTime.Now;
             
             await _invoiceRequestAddressRepository.InsertAsync(item);
+        }
+        
+        public virtual async System.Threading.Tasks.Task InsertFiscalIdAsync(InvoiceRequestFiscalId item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            item.CreatedOnUtc = DateTime.Now;
+            item.UpdatedOnUtc = DateTime.Now;
+            
+            await _invoiceRequestFiscalIdRepository.InsertAsync(item);
         }
         
         public virtual async System.Threading.Tasks.Task InsertTransitCode(InvoiceRequestTransitCode item)
@@ -160,12 +220,13 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
                 from state in StatesOfReq.DefaultIfEmpty()
                 select new Entity.InvoiceRequest()
                 {
+                    GuidId = p.GuidId,
                     Id = p.Id,
                     Deleted = p.Deleted,
                     Name = p.Name,
                     Surname = p.Surname,
                     BusinessName = p.BusinessName,
-                    FiscalCode = p.FiscalCode,
+                    // FiscalCode = p.FiscalCode,
                     LastUpdate = p.LastUpdate,
                     RequestDate = p.RequestDate,
                     ResponseDate = p.ResponseDate,
@@ -207,7 +268,7 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
             if (!string.IsNullOrEmpty(searchFiscalCode))
             {
                 query = from p in query
-                    where p.FiscalCode.Contains(searchFiscalCode)
+                    // where p.FiscalCode.Contains(searchFiscalCode)
                     select p;
             }
 
@@ -234,23 +295,27 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
                 join states in _invoiceRequestStateRepository.Table  on r.InvoiceRequestStateId equals states.Id 
                 into StatesOfReq
                 from state in StatesOfReq.DefaultIfEmpty()
+                join fc in _invoiceRequestFiscalIdRepository.Table on r.Id equals fc.InvoiceRequestId into FiscalCodes
+                from fcode in FiscalCodes.DefaultIfEmpty()
                 where r.Id == id
                 select new Entity.InvoiceRequest()
                 {   
                     Id = r.Id,
+                    GuidId = r.GuidId,
                     Deleted = r.Deleted,
                     Name = r.Name,
                     Surname = r.Surname,
                     BusinessName = r.BusinessName,
-                    FiscalCode = r.FiscalCode,
+                    SdICode = r.SdICode,
+                    InvoiceRequestFiscalId = fcode,
                     LastUpdate = r.LastUpdate,
                     RequestDate = r.RequestDate,
                     ResponseDate = r.ResponseDate,
-                    CreatedOnUtc = r.CreatedOnUtc,
                     PEC = r.PEC,
-                    UpdatedOnUtc = r.UpdatedOnUtc,
                     InvoiceRequestStateId = r.InvoiceRequestStateId,
-                    InvoiceRequestState = state
+                    InvoiceRequestState = state,
+                    CreatedOnUtc = r.CreatedOnUtc,
+                    UpdatedOnUtc = r.UpdatedOnUtc
                 };
 
             var invoiceRequest = query.FirstOrDefault();
@@ -276,6 +341,51 @@ namespace Nop.Plugin.MTB.Services.InvoiceRequest
                 //         InvoiceRequestTransitCodeStateId = c.InvoiceRequestTransitCodeStateId,
                 //         InvoiceRequestTransitCodeState = state
                 //     }).ToListAsync();
+                
+                return invoiceRequest;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        
+        private async Task<Entity.InvoiceRequest> GetInvoiceRequestDetailByGuid(string guid)
+        {
+            var query = from r in _invoiceRequestRepository.Table
+                join states in _invoiceRequestStateRepository.Table  on r.InvoiceRequestStateId equals states.Id 
+                into StatesOfReq
+                from state in StatesOfReq.DefaultIfEmpty()
+                join fc in _invoiceRequestFiscalIdRepository.Table on r.Id equals fc.InvoiceRequestId into FiscalCodes
+                from fcode in FiscalCodes.DefaultIfEmpty()
+                where r.GuidId == new Guid(guid)
+                select new Entity.InvoiceRequest()
+                {   
+                    Id = r.Id,
+                    GuidId = r.GuidId,
+                    Deleted = r.Deleted,
+                    Name = r.Name,
+                    Surname = r.Surname,
+                    BusinessName = r.BusinessName,
+                    SdICode = r.SdICode,
+                    InvoiceRequestFiscalId = fcode,
+                    LastUpdate = r.LastUpdate,
+                    RequestDate = r.RequestDate,
+                    ResponseDate = r.ResponseDate,
+                    PEC = r.PEC,
+                    InvoiceRequestStateId = r.InvoiceRequestStateId,
+                    InvoiceRequestState = state,
+                    CreatedOnUtc = r.CreatedOnUtc,
+                    UpdatedOnUtc = r.UpdatedOnUtc
+                };
+
+            var invoiceRequest = query.FirstOrDefault();
+
+            if (invoiceRequest != null)
+            {
+                invoiceRequest.InvoiceRequestAddress = await (from a in _invoiceRequestAddressRepository.Table
+                    where a.InvoiceRequestId == invoiceRequest.Id
+                    select a).FirstOrDefaultAsync();
                 
                 return invoiceRequest;
             }

@@ -6,10 +6,13 @@ namespace Nop.Plugin.MTB.Model.Api
 {
     public class InvoiceResponseModel
     {
-        public int Id { get; set; }
+        [JsonProperty("Id")]
+        public string GuidId { get; set; }
         public string Status { get; set; }
         [JsonProperty("request_date")]
         public DateTime RequestDate { get; set; }
+        [JsonProperty("response_date")]
+        public DateTime ResponseDate { get; set; }
         [JsonProperty("last_update")]
         public DateTime LastUpdate { get; set; }
         public List<InvoiceResponseInvoices> Invoices { get; set; }

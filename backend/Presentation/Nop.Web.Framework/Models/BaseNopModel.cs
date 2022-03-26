@@ -53,6 +53,7 @@ namespace Nop.Web.Framework.Models
         /// Gets or sets property to store any custom values for models 
         /// </summary>
         [XmlIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public Dictionary<string, object> CustomProperties { get; set; }
 
         #endregion
