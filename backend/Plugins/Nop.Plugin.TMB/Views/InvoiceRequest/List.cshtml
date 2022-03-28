@@ -1,0 +1,191 @@
+﻿@using Nop.Core.Infrastructure
+@using Nop.Web.Framework.Models.DataTables
+@using Nop.Plugin.TMB
+@using Nop.Plugin.TMB.Helpers
+@using Nop.Plugin.TMB.Model.Admin.InvoiceRequest
+@model global::Nop.Plugin.TMB.Model.Admin.InvoiceRequest.InvoiceRequestSearchModel
+
+@{
+    Layout = $"_AdminLayout";
+    var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+    var gridPageSizes = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+
+    //page title
+    ViewBag.Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest").Text;
+    
+    //active menu item (system name)
+    Html.SetActiveMenuItemSystemName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.List");
+}
+
+@Html.AntiForgeryToken()
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Title")
+    </h1>
+    @* <div class="float-right"> *@
+    @*     <a href="@Url.Action("Create")" class="btn bg-blue"> *@
+    @*         <i class="fa fa-plus-square"></i> *@
+    @*         @T("Admin.Common.AddNew") *@
+    @* *@
+    @*     </a> *@
+    @* </div> *@
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="cards-group">
+
+                            <div class="panel panel-default panel-search">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SearchName" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <nop-editor asp-for="SearchName" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SearchSurname" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <nop-editor asp-for="SearchSurname" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SearchBusinessName" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <nop-editor asp-for="SearchBusinessName" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SearchTransitCode" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <nop-editor asp-for="SearchTransitCode" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SearchFiscalCode" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <nop-editor asp-for="SearchFiscalCode" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SearchPEC" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <nop-editor asp-for="SearchPEC" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SearchStateId" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <nop-select asp-for="SearchStateId" asp-items="Model.SearchStates" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-8 col-md-offset-4">
+                                                    <button type="button" id="search-items" class="btn btn-primary btn-search">
+                                                        <i class="fa fa-search"></i>@T("Admin.Common.Search")
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    @await Html.PartialAsync("Table", new DataTablesModel
+                                    {
+                                        Name = "invoice-request-grid",
+                                        UrlRead = new DataUrl("List", "InvoiceRequest", null),
+                                        SearchButtonId = "search-items",
+                                        Filters = new List<FilterParameter>
+                                        {
+                                            new(nameof(Model.SearchName)),
+                                            new(nameof(Model.SearchSurname)),
+                                            new(nameof(Model.SearchBusinessName)),
+                                            new(nameof(Model.SearchTransitCode)),
+                                            new(nameof(Model.SearchFiscalCode)),
+                                            new(nameof(Model.SearchPEC)),
+                                            new(nameof(Model.SearchTransitCode)),
+                                            new(nameof(Model.SearchStateId))
+                                        },
+                                        ColumnCollection = new List<ColumnProperty>
+                                        {
+                                            new(nameof(InvoiceRequestModel.Name))
+                                            {
+                                                Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Name").Text,
+                                            },
+                                            new(nameof(InvoiceRequestModel.Surname))
+                                            {
+                                                Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Surname").Text,
+                                            },
+                                            new(nameof(InvoiceRequestModel.BusinessName))
+                                            {
+                                                Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.BusinessName").Text,
+                                            },
+                                            // new(nameof(InvoiceRequestModel.FiscalCode))
+                                            // {
+                                            //     Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.FiscalCode").Text,
+                                            // },
+                                            new(nameof(InvoiceRequestModel.PEC))
+                                            {
+                                                Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.PEC").Text,
+                                            },
+                                            new(nameof(InvoiceRequestModel.InvoiceRequestStateDescription))
+                                            {
+                                                Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Status").Text,
+                                            },
+                                            new(nameof(InvoiceRequestModel.Id))
+                                            {
+                                                Title = T("Admin.Common.View").Text,
+                                                Width = "100",
+                                                ClassName = NopColumnClassDefaults.Button,
+                                                Render = new RenderCustom("renderColumnEditOrView")
+                                            }
+                                        },
+                                        Length = Model.PageSize,
+                                        LengthMenu = Model.AvailablePageSizes
+                                        // SearchButtonId = "search-popups",
+                                    })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function renderColumnEditOrView(data, type, row, meta) {
+        if (row.InvoiceRequestStateId !== undefined && row.InvoiceRequestStateId === 2)
+        {
+            return '<a href="@Url.Content("~/Admin/InvoiceRequest/Edit/")' + data + '" class="btn btn-default"><i class="fas fa-pencil-alt"></i>@T("Admin.Common.Edit").Text</a>';
+        }
+        else
+        {
+            return '<a href="@Url.Content("~/Admin/InvoiceRequest/Edit/")' + data + '" class="btn btn-default"><i class="far fa-eye"></i>@T("Admin.Common.View").Text</a>';
+        }
+    }
+</script>

@@ -1,0 +1,36 @@
+﻿@using Nop.Plugin.TMB
+@model global::Nop.Plugin.TMB.Model.Admin.FileVintage.FileVintageUploadModel
+
+@{
+    Layout = $"_AdminLayout";
+    Html.SetActiveMenuItemSystemName(TenutaLuce.PLUGIN_NAME_SPACE + ".FileVintageUploadItem");
+}
+
+<form asp-controller="FileVintageUpload" asp-action="Create" method="post" id="filevintageupload-create-form">
+    <nop-antiforgery-token />
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.Common.AddNew")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @Html.Partial("_CreateOrUpdate", Model)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

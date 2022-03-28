@@ -9188,7 +9188,7 @@ namespace Nop.Services.Installation
                     Name = "Check invoice request answers",
                     //60 minutes
                     Seconds = 3600,
-                    Type = "Nop.Plugin.MTB.Task.CheckInvoiceResponseTask, Nop.Plugin.MTB.Task",
+                    Type = "Nop.Plugin.TMB.Task.CheckInvoiceResponseTask, Nop.Plugin.TMB.Task",
                     Enabled = true,
                     StopOnError = false
                 }
