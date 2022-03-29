@@ -3,17 +3,17 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
-      "applicationUrl": "https://mtb.nop",
+      "applicationUrl": "https://tmb.local",
       "sslPort": 0
     },
     "iisExpress": {
-      "applicationUrl": "http://localhost:65283/",
-      "sslPort": 44369
+      "applicationUrl": "http://localhost:8888/",
+      "sslPort": 44337
     }
   },
   "profiles": {
     "IIS Express": {
-      "commandName": "IIS",
+      "commandName": "IISExpress",
       "launchBrowser": true
     },
     "Nop.Web": {

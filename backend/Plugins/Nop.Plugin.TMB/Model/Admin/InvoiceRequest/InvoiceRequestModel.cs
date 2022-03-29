@@ -85,8 +85,8 @@ namespace Nop.Plugin.TMB.Model.Admin.InvoiceRequest
         
         public string BusinessName { get; set; }
 
-        public string FiscalCode { get; set; }
-        
+        public string RequestDate { get; set; }
+
         public string PEC { get; set; }
 
         public int? InvoiceRequestStateId { get; set; }

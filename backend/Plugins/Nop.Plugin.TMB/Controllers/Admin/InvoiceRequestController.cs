@@ -16,6 +16,7 @@ using Nop.Services.Logging;
 using Nop.Services.Messages;
 using Nop.Web.Framework.Models.Extensions;
 using Nop.Web.Framework.Mvc.Filters;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace Nop.Plugin.TMB.Controllers.Admin
 {
@@ -100,7 +101,7 @@ namespace Nop.Plugin.TMB.Controllers.Admin
             return View(model);
         }
 
-        public virtual async void PrepareProducts(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null)
+        public virtual void PrepareProducts(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null)
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
@@ -164,6 +165,9 @@ namespace Nop.Plugin.TMB.Controllers.Admin
                 model.TransitCodes = codes.Select(x => x.Code).ToList();
                 var jsonContent = JsonConvert.SerializeObject(model);
 
+                var ftp = new FTPManager("ftp://ftpsgeie.aqdemo.it", 5010,"ftp_invoice_demo|ftp_invoice_demo","7ujmNhgg!@jHUf","request","response", "processed");
+                ftp.UploadFile($"{item.GuidId}_{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.json", jsonContent);
+                
                 return continueEditing ? RedirectToAction("Edit", new { id = item.Id }) : RedirectToAction("List");
             }
 

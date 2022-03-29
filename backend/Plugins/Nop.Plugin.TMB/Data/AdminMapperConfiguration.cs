@@ -25,7 +25,11 @@ namespace Nop.Plugin.TMB.Data
             CreateMap<InvoiceRequestModel, InvoiceRequest>();
             CreateMap<InvoiceRequestAddressModel, InvoiceRequestAddress>();
             CreateMap<InvoiceRequestAddress, InvoiceRequestAddressModel>();
-            CreateMap<InvoiceRequest, InvoiceRequestForGridModel>();
+            CreateMap<InvoiceRequest, InvoiceRequestForGridModel>()
+                .ForMember(
+                dest => dest.RequestDate,
+                opt => opt.MapFrom(src => 
+                    (src.RequestDate != null) ? src.RequestDate.Value.ToString("dd/MM/yyyy HH:mm:ss") : null));
             CreateMap<InvoiceRequestTransitCode, InvoiceRequestTransitCodeModel>();
             CreateMap<InvoiceRequestFiscalId, InvoiceRequestFiscalIdModel>();
             CreateMap<InvoiceRequestFiscalIdModel, InvoiceRequestFiscalId>();

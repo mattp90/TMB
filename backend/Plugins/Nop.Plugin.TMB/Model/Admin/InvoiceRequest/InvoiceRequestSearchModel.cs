@@ -32,7 +32,7 @@ namespace Nop.Plugin.TMB.Model.Admin.InvoiceRequest
         [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.TransitCode")]
         public string SearchTransitCode { get; set; }
         
-        [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.State")]
+        [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Status")]
         public int SearchStateId { get; set; }
         public IList<SelectListItem> SearchStates { get; set; }
     }

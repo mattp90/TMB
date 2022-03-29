@@ -40,22 +40,22 @@ namespace Nop.Plugin.TMB.Services.InvoiceRequest
             string searchFiscalCode = "", string searchPEC = "", string searchTransitCode = "", int searchStateId = 0, int pageIndex = 0,
             int pageSize = Int32.MaxValue, bool noCache = false)
         {
-            IPagedList<Entity.InvoiceRequest> items;
+            IQueryable<Entity.InvoiceRequest> queryInvoiceRequest;
 
             if (noCache)
             {
-                items = await GetItems(invoiceRequestId, searchName, searchSurname, searchBusinessName, searchFiscalCode,
+                queryInvoiceRequest = GetItems(invoiceRequestId, searchName, searchSurname, searchBusinessName, searchFiscalCode,
                     searchPEC, searchTransitCode, searchStateId, pageIndex, pageSize);
             }
             else
             {
                 var cacheKey = InvoiceRequestItemAll;
-                items = await _cacheManager.GetAsync(new CacheKey(cacheKey),
-                    async () => await GetItems(invoiceRequestId, searchName, searchSurname, searchBusinessName, searchFiscalCode,
+                queryInvoiceRequest = _cacheManager.Get(new CacheKey(cacheKey),
+                    () => GetItems(invoiceRequestId, searchName, searchSurname, searchBusinessName, searchFiscalCode,
                         searchPEC, searchTransitCode, searchStateId, pageIndex, pageSize));
             }
 
-            return  new PagedList<Entity.InvoiceRequest>(items, pageIndex - 1, pageSize);
+            return await queryInvoiceRequest.ToPagedListAsync(pageIndex - 1, pageSize);
         }
 
         public virtual async Task<Entity.InvoiceRequest> GetByIdAsync(int id)
@@ -129,6 +129,32 @@ namespace Nop.Plugin.TMB.Services.InvoiceRequest
             await _invoiceRequestRepository.InsertAsync(item);
         }
 
+        public virtual async System.Threading.Tasks.Task InsertStateAsync(InvoiceRequestState item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            item.CreatedOnUtc = DateTime.Now;
+            item.UpdatedOnUtc = DateTime.Now;
+
+            await _invoiceRequestStateRepository.InsertAsync(item);
+        }
+        
+        public virtual async System.Threading.Tasks.Task InsertTransitionCodeStateAsync(InvoiceRequestTransitCodeState item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            item.CreatedOnUtc = DateTime.Now;
+            item.UpdatedOnUtc = DateTime.Now;
+
+            await _invoiceRequestTransitCodeStateRepository.InsertAsync(item);
+        }
+        
         public virtual async System.Threading.Tasks.Task UpdateAsync(Entity.InvoiceRequest item)
         {
             if (item == null)
@@ -216,7 +242,7 @@ namespace Nop.Plugin.TMB.Services.InvoiceRequest
         
         #region PRIVATE METHODS 
         
-        private async Task<IPagedList<Entity.InvoiceRequest>> GetItems(int invoiceRequestId = 0, string searchName = "",  string searchSurname = "", string searchBusinessName = "",
+        private IQueryable<Entity.InvoiceRequest> GetItems(int invoiceRequestId = 0, string searchName = "",  string searchSurname = "", string searchBusinessName = "",
             string searchFiscalCode = "", string searchPEC = "", string searchTransitCode = "", int searchStateId = 0, int pageIndex = 0, int pageSize = Int32.MaxValue)
         {
             var query = from p in _invoiceRequestRepository.Table
@@ -305,8 +331,8 @@ namespace Nop.Plugin.TMB.Services.InvoiceRequest
                     select p;
             }
             
-            return await query.OrderBy(m => m.Id).ThenBy(x => x.Name).ToPagedListAsync(pageIndex-1, pageSize);
-        }
+            return query.OrderByDescending(m => m.RequestDate);
+        }   
 
         private async Task<Entity.InvoiceRequest> GetInvoiceRequestDetail(int id)
         {

@@ -34,7 +34,7 @@ namespace Nop.Plugin.TMB.Controllers.Api
                 });
         }
         
-        [HttpGet, Route("/api/createinvoicerequest")]
+        [HttpPost, Route("/api/createinvoicerequest")]
         public virtual async Task<IActionResult> Create([FromBody] InvoiceRequestModel model)
         {
             var entity = model.ToEntity<InvoiceRequest>();
@@ -71,38 +71,50 @@ namespace Nop.Plugin.TMB.Controllers.Api
         [HttpGet, Route("/api/testresponse")]
         public virtual async Task<IActionResult> TestResponse([FromBody] InvoiceResponseModel model)
         {
-            var request = await _invoiceRequestService.GetDetailByGuidAsync(model.GuidId);
-            if (Enum.TryParse(model.Status.ToUpper(), out InvoiceRequestStateEnum myStatus))
+            try
             {
-                request.InvoiceRequestStateId = (int)myStatus;
-            }
-
-            request.RequestDate = model.RequestDate;
-            request.ResponseDate = model.ResponseDate;
-            request.LastUpdate = model.LastUpdate;
-            
-            await _invoiceRequestService.UpdateAsync(request);
-
-            foreach (var code in model.Invoices)
-            {
-                var transitCode = await _invoiceRequestService.GetTransitCodesByRequestIdAndCode(request.Id, code.TransitCode);
-                transitCode.PdfName = code.PdfName;
-                if (Enum.TryParse(code.Status.ToUpper(), out InvoiceRequestTransitCodeStateEnum statusCode))
+                var request = await _invoiceRequestService.GetDetailByGuidAsync(model.GuidId);
+                if (Enum.TryParse(model.Status.ToUpper(), out InvoiceRequestStateEnum myStatus))
                 {
-                    transitCode.InvoiceRequestTransitCodeStateId = (int)statusCode;
+                    request.InvoiceRequestStateId = (int)myStatus;
                 }
-                
-                await _invoiceRequestService.UpdateTransitCodeAsync(transitCode);
-            }
+
+                request.RequestDate = model.RequestDate;
+                request.ResponseDate = model.ResponseDate;
+                request.LastUpdate = model.LastUpdate;
             
-            // if status is ... send mail otherwise TO DO
-            
-            return ApiReturn(
-                new ApiError()
+                await _invoiceRequestService.UpdateAsync(request);
+
+                foreach (var code in model.Invoices)
                 {
-                    Code = HttpStatusCode.OK,
-                    Message = $"ok"
-                });
+                    var transitCode = await _invoiceRequestService.GetTransitCodesByRequestIdAndCode(request.Id, code.TransitCode);
+                    transitCode.PdfName = code.PdfName;
+                    if (Enum.TryParse(code.Status.ToUpper(), out InvoiceRequestTransitCodeStateEnum statusCode))
+                    {
+                        transitCode.InvoiceRequestTransitCodeStateId = (int)statusCode;
+                    }
+                
+                    await _invoiceRequestService.UpdateTransitCodeAsync(transitCode);
+                }
+            
+                // if status is ... send mail otherwise TO DO
+            
+                return ApiReturn(
+                    new ApiError()
+                    {
+                        Code = HttpStatusCode.OK,
+                        Message = $"ok"
+                    });
+            }
+            catch (Exception e)
+            {
+                return ApiReturn(
+                    new ApiError()
+                    {
+                        Code = HttpStatusCode.InternalServerError,
+                        Message = $"{e.Message}"
+                    });
+            }
         }
     }
 }

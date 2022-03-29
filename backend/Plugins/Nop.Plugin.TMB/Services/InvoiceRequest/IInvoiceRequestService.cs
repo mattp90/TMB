@@ -27,6 +27,10 @@ namespace Nop.Plugin.TMB.Services.InvoiceRequest
         IList<InvoiceRequestState> GetInvoiceRequestStates();
 
         System.Threading.Tasks.Task InsertAsync(Entity.InvoiceRequest item);
+        
+        System.Threading.Tasks.Task InsertStateAsync(InvoiceRequestState item);
+
+        System.Threading.Tasks.Task InsertTransitionCodeStateAsync(InvoiceRequestTransitCodeState item);
 
         System.Threading.Tasks.Task InsertAddressAsync(InvoiceRequestAddress item);
         

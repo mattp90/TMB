@@ -22,13 +22,6 @@
     <h1 class="float-left">
         @T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Title")
     </h1>
-    @* <div class="float-right"> *@
-    @*     <a href="@Url.Action("Create")" class="btn bg-blue"> *@
-    @*         <i class="fa fa-plus-square"></i> *@
-    @*         @T("Admin.Common.AddNew") *@
-    @* *@
-    @*     </a> *@
-    @* </div> *@
 </div>
 
 <section class="content">
@@ -150,6 +143,10 @@
                                             new(nameof(InvoiceRequestModel.PEC))
                                             {
                                                 Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.PEC").Text,
+                                            },
+                                            new(nameof(InvoiceRequestModel.RequestDate))
+                                            {
+                                                Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.RequestDate").Text,
                                             },
                                             new(nameof(InvoiceRequestModel.InvoiceRequestStateDescription))
                                             {
