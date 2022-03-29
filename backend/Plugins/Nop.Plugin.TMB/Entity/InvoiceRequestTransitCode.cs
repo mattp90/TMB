@@ -8,11 +8,11 @@ namespace Nop.Plugin.TMB.Entity
     {
         public int InvoiceRequestId { get; set; }
         public string Code { get; set; }
-        public int? InvoiceRequestTransitCodeStateId { get; set; }
+        public int? InvoiceRequestTransitCodeStatusId { get; set; }
         public string PdfName { get; set; }
         public DateTime CreatedOnUtc { get; set; }
         public DateTime UpdatedOnUtc { get; set; }
-        public virtual InvoiceRequestTransitCodeState InvoiceRequestTransitCodeState { get; set; }
+        public virtual InvoiceRequestTransitCodeStatus InvoiceRequestTransitCodeStatus { get; set; }
         public virtual InvoiceRequest InvoiceRequest { get; set; }
     }
 }

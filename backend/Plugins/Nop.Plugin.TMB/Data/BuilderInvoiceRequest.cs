@@ -8,10 +8,10 @@ namespace Nop.Plugin.TMB.Data
     {
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
-            table.WithColumn(nameof(InvoiceRequest.InvoiceRequestStateId))
+            table.WithColumn(nameof(InvoiceRequest.InvoiceRequestStatusId))
                 .AsInt32()
                 .Nullable()
-                .ForeignKey(nameof(InvoiceRequestState), nameof(InvoiceRequestState.Id))
+                .ForeignKey(nameof(InvoiceRequestStatus), nameof(InvoiceRequestStatus.Id))
                 .OnDelete(System.Data.Rule.None)
                 .Indexed();
         }

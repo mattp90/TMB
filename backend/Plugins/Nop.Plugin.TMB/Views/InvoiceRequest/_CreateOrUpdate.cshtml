@@ -20,10 +20,10 @@
                     <h4>@T("profile.personalinfo").Text</h4>
                     <div class="form-group row">
                         <div class="col-sm-1">
-                            <nop-label asp-for="InvoiceRequestStateDescription"/>
+                            <nop-label asp-for="InvoiceRequestStatusDescription"/>
                         </div>
                         <div class="col-sm-2">
-                            <b><nop-editor asp-disabled="true" asp-for="InvoiceRequestStateDescription"/></b>
+                            <b><nop-editor asp-disabled="true" asp-for="InvoiceRequestStatusDescription"/></b>
                         </div>
                     </div>
     
@@ -32,7 +32,7 @@
                             <nop-label asp-for="Name"/>
                         </div>
                         <div class="col-sm-2">
-                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.FAILED)" asp-for="Name" asp-required="true"/>
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStatusId != (int)InvoiceRequestStatusEnum.FAILED)" asp-for="Name" asp-required="true"/>
                         </div>
                     </div>
     
@@ -41,7 +41,7 @@
                             <nop-label asp-for="Surname"/>
                         </div>
                         <div class="col-sm-2">
-                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.FAILED)" asp-for="Surname" asp-required="true"/>
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStatusId != (int)InvoiceRequestStatusEnum.FAILED)" asp-for="Surname" asp-required="true"/>
                         </div>
                     </div>
     
@@ -50,7 +50,7 @@
                             <nop-label asp-for="BusinessName"/>
                         </div>
                         <div class="col-sm-2">
-                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.FAILED)" asp-for="BusinessName" asp-required="true"/>
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStatusId != (int)InvoiceRequestStatusEnum.FAILED)" asp-for="BusinessName" asp-required="true"/>
                         </div>
                     </div>
                     
@@ -59,7 +59,7 @@
                             <nop-label asp-for="PEC"/>
                         </div>
                         <div class="col-sm-2">
-                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.FAILED)" asp-for="PEC" asp-required="true"/>
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStatusId != (int)InvoiceRequestStatusEnum.FAILED)" asp-for="PEC" asp-required="true"/>
                         </div>
                     </div>
                     
@@ -68,7 +68,7 @@
                             <nop-label asp-for="SdICode"/>
                         </div>
                         <div class="col-sm-2">
-                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.FAILED)" asp-for="SdICode" asp-required="true"/>
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStatusId != (int)InvoiceRequestStatusEnum.FAILED)" asp-for="SdICode" asp-required="true"/>
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                             <nop-label asp-for="InvoiceRequestFiscalId.Country"/>
                         </div>
                         <div class="col-sm-2">
-                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.FAILED)" asp-for="InvoiceRequestFiscalId.Country" asp-required="true"/>
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStatusId != (int)InvoiceRequestStatusEnum.FAILED)" asp-for="InvoiceRequestFiscalId.Country" asp-required="true"/>
                         </div>
                     </div>
                     
@@ -93,7 +93,7 @@
                             <nop-label asp-for="InvoiceRequestFiscalId.Code"/>
                         </div>
                         <div class="col-sm-2">
-                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.FAILED)" asp-for="InvoiceRequestFiscalId.Code" asp-required="true"/>
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStatusId != (int)InvoiceRequestStatusEnum.FAILED)" asp-for="InvoiceRequestFiscalId.Code" asp-required="true"/>
                         </div>
                     </div>
                     
@@ -102,7 +102,7 @@
                             <nop-label asp-for="InvoiceRequestFiscalId.VatCode"/>
                         </div>
                         <div class="col-sm-2">
-                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int)InvoiceRequestStateEnum.FAILED)" asp-for="InvoiceRequestFiscalId.VatCode" asp-required="true"/>
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStatusId != (int)InvoiceRequestStatusEnum.FAILED)" asp-for="InvoiceRequestFiscalId.VatCode" asp-required="true"/>
                         </div>
                     </div>
                 </div>
@@ -118,7 +118,7 @@
                             <nop-label asp-for="InvoiceRequestAddress.AddressName"/>
                         </div>
                         <div class="col-sm-3">
-                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int) InvoiceRequestStateEnum.FAILED)" asp-for="InvoiceRequestAddress.AddressName" asp-required="true"/>
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStatusId != (int) InvoiceRequestStatusEnum.FAILED)" asp-for="InvoiceRequestAddress.AddressName" asp-required="true"/>
                         </div>
                     </div>
 
@@ -127,7 +127,7 @@
                             <nop-label asp-for="InvoiceRequestAddress.Country"/>
                         </div>
                         <div class="col-sm-2">
-                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int) InvoiceRequestStateEnum.FAILED)" asp-for="InvoiceRequestAddress.Country" asp-required="true"/>
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStatusId != (int) InvoiceRequestStatusEnum.FAILED)" asp-for="InvoiceRequestAddress.Country" asp-required="true"/>
                         </div>
                     </div>
 
@@ -136,7 +136,7 @@
                             <nop-label asp-for="InvoiceRequestAddress.City"/>
                         </div>
                         <div class="col-sm-2">
-                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int) InvoiceRequestStateEnum.FAILED)" asp-for="InvoiceRequestAddress.City" asp-required="true"/>
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStatusId != (int) InvoiceRequestStatusEnum.FAILED)" asp-for="InvoiceRequestAddress.City" asp-required="true"/>
                         </div>
                     </div>
 
@@ -145,7 +145,7 @@
                             <nop-label asp-for="InvoiceRequestAddress.Province"/>
                         </div>
                         <div class="col-sm-2">
-                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int) InvoiceRequestStateEnum.FAILED)" asp-for="InvoiceRequestAddress.Province" asp-required="true"/>
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStatusId != (int) InvoiceRequestStatusEnum.FAILED)" asp-for="InvoiceRequestAddress.Province" asp-required="true"/>
                         </div>
                     </div>
 
@@ -154,7 +154,7 @@
                             <nop-label asp-for="InvoiceRequestAddress.PostalCode"/>
                         </div>
                         <div class="col-sm-3">
-                            <nop-editor asp-disabled="@(Model.InvoiceRequestStateId != (int) InvoiceRequestStateEnum.FAILED)" asp-for="InvoiceRequestAddress.PostalCode" asp-required="true"/>
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStatusId != (int) InvoiceRequestStatusEnum.FAILED)" asp-for="InvoiceRequestAddress.PostalCode" asp-required="true"/>
                         </div>
                     </div>
                 </div>
@@ -179,7 +179,7 @@
                                         Editable = true,
                                         EditType = EditType.String
                                     },
-                                    new(nameof(InvoiceRequestTransitCodeModel.InvoiceRequestTransitCodeStateDescription))
+                                    new(nameof(InvoiceRequestTransitCodeModel.InvoiceRequestTransitCodeStatusDescription))
                                     {
                                         Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Status").Text,
                                     }

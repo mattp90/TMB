@@ -46,7 +46,7 @@ namespace Nop.Plugin.TMB.Helpers
                 requestStream.Close();
             }
 	        
-            FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+            // FtpWebResponse response = (FtpWebResponse)request.GetResponse();
             // Console.WriteLine($"Upload File Complete, status {response.StatusDescription}");
         }
         
@@ -77,6 +77,26 @@ namespace Nop.Plugin.TMB.Helpers
             return result;
         }
 
+        public string DownloadFile(string filename)
+        {
+            var result = string.Empty;
+            
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"{Host}:{Port}/{ResponseFolder}/{filename}");
+            request.Credentials = new NetworkCredential(Username, Password);
+            request.EnableSsl = true;
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+
+            using (var res = (FtpWebResponse) request.GetResponse())
+            {
+                Stream responseStream = res.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream);
+                result = reader.ReadToEnd();
+                reader.Close();
+            }
+
+            return result;
+        }
+        
         public void MoveFileToProcessed(string filename)
         {
             FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"{Host}:{Port}/{ResponseFolder}/{filename}");

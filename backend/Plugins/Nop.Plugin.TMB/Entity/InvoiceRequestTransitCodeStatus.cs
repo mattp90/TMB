@@ -5,7 +5,7 @@ using Nop.Core.Domain.Localization;
 
 namespace Nop.Plugin.TMB.Entity
 {
-    public class InvoiceRequestState : BaseEntity, ILocalizedEntity
+    public class InvoiceRequestTransitCodeStatus : BaseEntity, ILocalizedEntity
     {
         public string Description { get; set; }
         

@@ -86,10 +86,10 @@
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col-md-4">
-                                                    <nop-label asp-for="SearchStateId" />
+                                                    <nop-label asp-for="SearchStatusId" />
                                                 </div>
                                                 <div class="col-md-8">
-                                                    <nop-select asp-for="SearchStateId" asp-items="Model.SearchStates" />
+                                                    <nop-select asp-for="SearchStatusId" asp-items="Model.SearchStates" />
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -120,7 +120,7 @@
                                             new(nameof(Model.SearchFiscalCode)),
                                             new(nameof(Model.SearchPEC)),
                                             new(nameof(Model.SearchTransitCode)),
-                                            new(nameof(Model.SearchStateId))
+                                            new(nameof(Model.SearchStatusId))
                                         },
                                         ColumnCollection = new List<ColumnProperty>
                                         {
@@ -148,7 +148,7 @@
                                             {
                                                 Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.RequestDate").Text,
                                             },
-                                            new(nameof(InvoiceRequestModel.InvoiceRequestStateDescription))
+                                            new(nameof(InvoiceRequestModel.InvoiceRequestStatusDescription))
                                             {
                                                 Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Status").Text,
                                             },
@@ -176,7 +176,7 @@
 
 <script>
     function renderColumnEditOrView(data, type, row, meta) {
-        if (row.InvoiceRequestStateId !== undefined && row.InvoiceRequestStateId === 2)
+        if (row.InvoiceRequestStatusId !== undefined && row.InvoiceRequestStatusId === 2)
         {
             return '<a href="@Url.Content("~/Admin/InvoiceRequest/Edit/")' + data + '" class="btn btn-default"><i class="fas fa-pencil-alt"></i>@T("Admin.Common.Edit").Text</a>';
         }

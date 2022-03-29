@@ -3,7 +3,7 @@
 @model global::Nop.Plugin.TMB.Model.Admin.InvoiceRequest.InvoiceRequestModel
 
 @{
-    Html.SetActiveMenuItemSystemName(TMB.PLUGIN_NAME_SPACE + ".FileVintageUpload");
+    Html.SetActiveMenuItemSystemName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest");
     Layout = $"_AdminLayout";
 }
 
@@ -13,10 +13,10 @@
         <h1 class="float-left">
             @T("Admin.Common.Edit")
             <small>
-                <i class="fa fa-arrow-circle-left"></i>@Html.ActionLink(T(TMB.PLUGIN_NAME_SPACE + ".FileVintageUpload.BackToList").Text, "List")
+                <i class="fa fa-arrow-circle-left"></i>@Html.ActionLink(T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.BackToList").Text, "List")
             </small>
         </h1>
-        @if (Model.InvoiceRequestStateId == (int)InvoiceRequestStateEnum.FAILED)
+        @if (Model.InvoiceRequestStatusId == (int)InvoiceRequestStatusEnum.FAILED)
         {
             <div class="float-right">
                 <button type="submit" name="save" class="btn bg-blue">
@@ -27,7 +27,7 @@
                     <i class="fa fa-floppy-o"></i>
                     @T("Admin.Common.SaveContinue")
                 </button>
-                <span id="filevintageupload-delete" class="btn bg-red">
+                <span id="-delete" class="btn bg-red">
                     <i class="fa fa-trash-o"></i>
                     @T("Admin.Common.Delete")
                 </span>
@@ -49,4 +49,4 @@
         </div>
     </section>
 </form>
-<nop-delete-confirmation asp-button-id="filevintageupload-delete" asp-model-id="@Model.Id" />
+<nop-delete-confirmation asp-button-id="invoicerequest-delete" asp-model-id="@Model.Id" />

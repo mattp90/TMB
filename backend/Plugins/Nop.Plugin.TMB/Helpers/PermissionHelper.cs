@@ -5,6 +5,6 @@ namespace Nop.Plugin.TMB.Helpers
 {
     public static class PermissionHelper
     {
-        public static readonly PermissionRecord AccessFileVintageUpload = StandardPermissionProvider.ManageProducts;
+        public static readonly PermissionRecord AccessInvoiceRequest = StandardPermissionProvider.AccessAdminPanel;
     }
 }

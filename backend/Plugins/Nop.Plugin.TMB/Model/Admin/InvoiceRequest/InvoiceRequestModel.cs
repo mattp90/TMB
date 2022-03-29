@@ -41,11 +41,11 @@ namespace Nop.Plugin.TMB.Model.Admin.InvoiceRequest
         public DateTime LastUpdate { get; set; }
 
         [Newtonsoft.Json.JsonIgnore]
-        public int? InvoiceRequestStateId { get; set; }
+        public int? InvoiceRequestStatusId { get; set; }
         
         [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Status")]
         [Newtonsoft.Json.JsonIgnore]
-        public string InvoiceRequestStateDescription { get; set; }
+        public string InvoiceRequestStatusDescription { get; set; }
 
         [Newtonsoft.Json.JsonIgnore]
         public DateTime CreatedOnUtc { get; set; }
@@ -89,7 +89,7 @@ namespace Nop.Plugin.TMB.Model.Admin.InvoiceRequest
 
         public string PEC { get; set; }
 
-        public int? InvoiceRequestStateId { get; set; }
-        public string InvoiceRequestStateDescription { get; set; }
+        public int? InvoiceRequestStatusId { get; set; }
+        public string InvoiceRequestStatusDescription { get; set; }
     }
 }

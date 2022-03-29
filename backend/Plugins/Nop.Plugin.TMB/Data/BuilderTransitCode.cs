@@ -14,10 +14,10 @@ namespace Nop.Plugin.TMB.Data
                 .OnDelete(System.Data.Rule.None)
                 .Indexed();
             
-            table.WithColumn(nameof(InvoiceRequestTransitCode.InvoiceRequestTransitCodeStateId))
+            table.WithColumn(nameof(InvoiceRequestTransitCode.InvoiceRequestTransitCodeStatusId))
                 .AsInt32()
                 .Nullable()
-                .ForeignKey(nameof(InvoiceRequestTransitCodeState), nameof(InvoiceRequestTransitCodeState.Id))
+                .ForeignKey(nameof(InvoiceRequestTransitCodeStatus), nameof(InvoiceRequestTransitCodeStatus.Id))
                 .OnDelete(System.Data.Rule.None)
                 .Indexed();
         }

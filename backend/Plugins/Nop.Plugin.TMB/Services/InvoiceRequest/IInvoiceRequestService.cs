@@ -9,7 +9,7 @@ namespace Nop.Plugin.TMB.Services.InvoiceRequest
     public interface IInvoiceRequestService
     {
         Task<IPagedList<Entity.InvoiceRequest>> GetAllAsync(int invoiceRequestId = 0, string searchName = "", string searchSurname = "", string searchBusinessName = "",
-            string searchFiscalCode = "", string searchPEC = "", string searchTransitCode = "", int searchStateId = 0, int pageIndex = 0,
+            string searchFiscalCode = "", string searchPEC = "", string searchTransitCode = "", int searchStatusId = 0, int pageIndex = 0,
             int pageSize = Int32.MaxValue, bool noCache = false);
         
         Task<Entity.InvoiceRequest> GetByIdAsync(int id);
@@ -22,15 +22,15 @@ namespace Nop.Plugin.TMB.Services.InvoiceRequest
         
         Task<Entity.InvoiceRequest> GetDetailByIdAsync(int id);
 
-        Task<Entity.InvoiceRequest> GetDetailByGuidAsync(string guid);
+        Task<Entity.InvoiceRequest> GetDetailByGuidAsync(Guid guid);
         
-        IList<InvoiceRequestState> GetInvoiceRequestStates();
+        IList<InvoiceRequestStatus> GetInvoiceRequestStates();
 
         System.Threading.Tasks.Task InsertAsync(Entity.InvoiceRequest item);
         
-        System.Threading.Tasks.Task InsertStateAsync(InvoiceRequestState item);
+        System.Threading.Tasks.Task InsertStateAsync(InvoiceRequestStatus item);
 
-        System.Threading.Tasks.Task InsertTransitionCodeStateAsync(InvoiceRequestTransitCodeState item);
+        System.Threading.Tasks.Task InsertTransitionCodeStateAsync(InvoiceRequestTransitCodeStatus item);
 
         System.Threading.Tasks.Task InsertAddressAsync(InvoiceRequestAddress item);
         

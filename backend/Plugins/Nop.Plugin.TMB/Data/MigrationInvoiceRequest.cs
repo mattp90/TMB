@@ -19,8 +19,8 @@ namespace Nop.Plugin.TMB.Data
 
         public override void Up()
         {
-            _migrationManager.BuildTable<InvoiceRequestState>(Create);
-            _migrationManager.BuildTable<InvoiceRequestTransitCodeState>(Create);
+            _migrationManager.BuildTable<InvoiceRequestStatus>(Create);
+            _migrationManager.BuildTable<InvoiceRequestTransitCodeStatus>(Create);
             _migrationManager.BuildTable<InvoiceRequest>(Create);
             _migrationManager.BuildTable<InvoiceRequestAddress>(Create);
             _migrationManager.BuildTable<InvoiceRequestTransitCode>(Create);
@@ -42,37 +42,37 @@ namespace Nop.Plugin.TMB.Data
         
         public override void Up()
         {
-            var statePending = new InvoiceRequestState()
+            var statePending = new InvoiceRequestStatus()
             {
                 Description = "Pending"
             };
             _invoiceRequestService.InsertStateAsync(statePending);
             
-            var stateFailed = new InvoiceRequestState()
+            var stateFailed = new InvoiceRequestStatus()
             {
                 Description = "Failed"
             };
             _invoiceRequestService.InsertStateAsync(stateFailed);
             
-            var stateCompleted = new InvoiceRequestState()
+            var stateCompleted = new InvoiceRequestStatus()
             {
                 Description = "Completed"
             };
             _invoiceRequestService.InsertStateAsync(stateCompleted);
 
-            var transitionStateSuccess = new InvoiceRequestTransitCodeState()
+            var transitionStateSuccess = new InvoiceRequestTransitCodeStatus()
             {
                 Description = "Success"
             };
             _invoiceRequestService.InsertTransitionCodeStateAsync(transitionStateSuccess);
             
-            var transitionStateFailure = new InvoiceRequestTransitCodeState()
+            var transitionStateFailure = new InvoiceRequestTransitCodeStatus()
             {
                 Description = "Failure"
             };
             _invoiceRequestService.InsertTransitionCodeStateAsync(transitionStateFailure);
             
-            var transitionStateCompleted = new InvoiceRequestTransitCodeState()
+            var transitionStateCompleted = new InvoiceRequestTransitCodeStatus()
             {
                 Description = "Completed"
             };

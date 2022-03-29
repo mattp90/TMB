@@ -1,6 +1,6 @@
 namespace Nop.Plugin.TMB.Helpers
 {
-    public enum InvoiceRequestStateEnum
+    public enum InvoiceRequestStatusEnum
     {
         PENDING = 1,
         FAILED = 2,
