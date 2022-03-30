@@ -9,6 +9,7 @@ using Nop.Web.Areas.Admin.Controllers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using Nop.Core.Configuration;
 using Nop.Plugin.TMB.Extensions;
 using Nop.Plugin.TMB.Services.InvoiceRequest;
 using Nop.Services.Localization;
@@ -22,6 +23,7 @@ namespace Nop.Plugin.TMB.Controllers.Admin
 {
     public class InvoiceRequestController : BaseAdminController
     {
+        private readonly AppSettings _appSettings;
         private readonly IPermissionService _permissionService;
         private readonly IInvoiceRequestService _invoiceRequestService;
         private readonly ICustomerActivityService _customerActivityService;
@@ -29,7 +31,7 @@ namespace Nop.Plugin.TMB.Controllers.Admin
         private readonly INotificationService _notificationService;
         private readonly ILogger _logger;
 
-        public InvoiceRequestController(IPermissionService permissionService, IInvoiceRequestService invoiceRequestService, ICustomerActivityService customerActivityService, ILocalizationService localizationService, INotificationService notificationService, ILogger logger)
+        public InvoiceRequestController(AppSettings appSettings, IPermissionService permissionService, IInvoiceRequestService invoiceRequestService, ICustomerActivityService customerActivityService, ILocalizationService localizationService, INotificationService notificationService, ILogger logger)
         {
             _permissionService = permissionService;            
             _invoiceRequestService = invoiceRequestService;
@@ -37,10 +39,12 @@ namespace Nop.Plugin.TMB.Controllers.Admin
             _localizationService = localizationService;
             _notificationService = notificationService;
             _logger = logger;
+            _appSettings = appSettings;
         }
 
         public virtual IActionResult Index()
         {
+            Console.WriteLine(_appSettings.FtpConfig.Host);
             return RedirectToAction("List");
         }
 
@@ -102,6 +106,7 @@ namespace Nop.Plugin.TMB.Controllers.Admin
                     return RedirectToAction("List");
 
                 item = model.ToEntity(item);
+                item.LastUpdate =DateTime.Now;
 
                 try
                 {
@@ -109,8 +114,8 @@ namespace Nop.Plugin.TMB.Controllers.Admin
                     // Generate JSon to send in FTP folder requests
                     var codes = await _invoiceRequestService.GetTransitCodesByIdRequestAsync(item.Id);
                     model.TransitCodes = codes.Select(x => x.Code).ToList();
-                    var jsonContent = JsonConvert.SerializeObject(model);
-                    var ftp = new FTPManager("ftp://ftpsgeie.aqdemo.it", 5010,"ftp_invoice_demo|ftp_invoice_demo","7ujmNhgg!@jHUf","request","response", "processed");
+                    var jsonContent = JsonConvert.SerializeObject(model, Formatting.Indented);
+                    var ftp = new FTPManager(_appSettings.FtpConfig.Host, _appSettings.FtpConfig.Port,_appSettings.FtpConfig.Username,_appSettings.FtpConfig.Password,_appSettings.FtpConfig.RequestFolder,_appSettings.FtpConfig.ResponseFolder, _appSettings.FtpConfig.ProcessedFolder);
                     ftp.UploadFile($"{item.GuidId}_{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.json", jsonContent);
                     await _invoiceRequestService.UpdateAsync(item);
                     

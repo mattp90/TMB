@@ -52,6 +52,7 @@ namespace Nop.Core.Configuration
         [JsonExtensionData]
         public IDictionary<string, JToken> AdditionalData { get; set; }
 
+        public FtpConfig FtpConfig { get; set; } = new FtpConfig();
         #endregion
     }
 }

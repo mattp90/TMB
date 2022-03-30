@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using Nop.Core.Configuration;
 using Nop.Plugin.TMB.Helpers;
 using Nop.Plugin.TMB.Model.Api;
 using Nop.Plugin.TMB.Services.InvoiceRequest;
@@ -10,13 +11,15 @@ namespace Nop.Plugin.TMB.Task
 {
     public partial class CheckInvoiceResponseTask : IScheduleTask
     {
+        private readonly AppSettings _appSettings;
         private readonly ILogger _logger;
         private readonly IInvoiceRequestService _invoiceRequestService;
         
-        public CheckInvoiceResponseTask(ILogger logger, IInvoiceRequestService invoiceRequestService)
+        public CheckInvoiceResponseTask(AppSettings appSettings, ILogger logger, IInvoiceRequestService invoiceRequestService)
         {
             _logger = logger;
             _invoiceRequestService = invoiceRequestService;
+            _appSettings = appSettings;
         }
 
         /// <summary>
@@ -30,7 +33,7 @@ namespace Nop.Plugin.TMB.Task
 
         private async System.Threading.Tasks.Task GetResponses()
         {
-            var ftp = new FTPManager("ftp://ftpsgeie.aqdemo.it", 5010,"ftp_invoice_demo|ftp_invoice_demo","7ujmNhgg!@jHUf","request","response", "processed");
+            var ftp = new FTPManager(_appSettings.FtpConfig.Host, _appSettings.FtpConfig.Port,_appSettings.FtpConfig.Username,_appSettings.FtpConfig.Password,_appSettings.FtpConfig.RequestFolder,_appSettings.FtpConfig.ResponseFolder, _appSettings.FtpConfig.ProcessedFolder);
             var responses = ftp.GetResponseFiles();
 
             foreach (var response in responses)
@@ -45,9 +48,7 @@ namespace Nop.Plugin.TMB.Task
                         request.InvoiceRequestStatusId = (int)myStatus;
                     }
 
-                    request.RequestDate = model.RequestDate;
-                    request.ResponseDate = model.ResponseDate;
-                    request.LastUpdate = model.LastUpdate;
+                    request.LastUpdate = DateTime.Now;
             
                     // Update info InvoiceRequest
                     await _invoiceRequestService.UpdateAsync(request);

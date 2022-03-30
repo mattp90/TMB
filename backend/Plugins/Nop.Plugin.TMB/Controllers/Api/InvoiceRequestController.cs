@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Nop.Core.Configuration;
 using Nop.Plugin.TMB.Entity;
 using Nop.Plugin.TMB.Services.InvoiceRequest;
 using Nop.Services.Logging;
@@ -17,13 +18,15 @@ namespace Nop.Plugin.TMB.Controllers.Api
 {
     public class InvoiceRequestController : ApiDefaultController
     {
+        private readonly AppSettings _appSettings;
         private readonly IInvoiceRequestService _invoiceRequestService;
         private readonly ILogger _logger;
         
-        public InvoiceRequestController(ApiSettings apiSettings, ILogger logger, IInvoiceRequestService invoiceRequestService) : base(apiSettings, logger)
+        public InvoiceRequestController(AppSettings appSettings, ApiSettings apiSettings, ILogger logger, IInvoiceRequestService invoiceRequestService) : base(apiSettings, logger)
         {
             _logger = logger;
             _invoiceRequestService = invoiceRequestService;
+            _appSettings = appSettings;
         }
 
         [HttpGet, Route("/api/ping")]
@@ -44,6 +47,8 @@ namespace Nop.Plugin.TMB.Controllers.Api
             {
                 var entity = model.ToEntity<InvoiceRequest>();
                 entity.GuidId = Guid.NewGuid();
+                entity.RequestDate = DateTime.Now;
+                entity.LastUpdate = DateTime.Now;
                 await _invoiceRequestService.InsertAsync(entity);
             
                 var address = model.InvoiceRequestAddress.ToEntity<InvoiceRequestAddress>();
@@ -66,8 +71,9 @@ namespace Nop.Plugin.TMB.Controllers.Api
                 }
 
                 // Send to FTP folder
-                var jsonContent = JsonConvert.SerializeObject(model);
-                var ftp = new FTPManager("ftp://ftpsgeie.aqdemo.it", 5010,"ftp_invoice_demo|ftp_invoice_demo","7ujmNhgg!@jHUf","request","response", "processed");
+                model.GuidId = entity.GuidId;
+                var jsonContent = JsonConvert.SerializeObject(model, Formatting.Indented);
+                var ftp = new FTPManager(_appSettings.FtpConfig.Host, _appSettings.FtpConfig.Port,_appSettings.FtpConfig.Username,_appSettings.FtpConfig.Password,_appSettings.FtpConfig.RequestFolder,_appSettings.FtpConfig.ResponseFolder, _appSettings.FtpConfig.ProcessedFolder);
                 ftp.UploadFile($"{entity.GuidId}_{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.json", jsonContent);
                 
                 return ApiReturn(
