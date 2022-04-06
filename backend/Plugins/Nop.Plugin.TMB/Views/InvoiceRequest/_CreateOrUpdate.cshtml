@@ -56,6 +56,15 @@
                     
                     <div class="form-group row">
                         <div class="col-sm-1">
+                            <nop-label asp-for="Email"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <nop-editor asp-disabled="@(Model.InvoiceRequestStatusId != (int)InvoiceRequestStatusEnum.FAILED)" asp-for="Email" asp-required="true"/>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <div class="col-sm-1">
                             <nop-label asp-for="PEC"/>
                         </div>
                         <div class="col-sm-2">
@@ -182,6 +191,10 @@
                                     new(nameof(InvoiceRequestTransitCodeModel.InvoiceRequestTransitCodeStatusDescription))
                                     {
                                         Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Status").Text,
+                                    },
+                                    new(nameof(InvoiceRequestTransitCodeModel.PdfName))
+                                    {
+                                        Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Pdf").Text,
                                     }
                                 }
                             })

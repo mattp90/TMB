@@ -15,8 +15,9 @@ namespace Nop.Plugin.TMB.Helpers
         public string RequestFolder { get; set; }
         public string ResponseFolder { get; set; }
         public string ProcessedFolder { get; set; }
+        public string PdfFolder { get; set; }
 
-        public FTPManager(string host, int port, string username, string password, string requestFolder, string responseFolder, string processedFolder)
+        public FTPManager(string host, int port, string username, string password, string requestFolder, string responseFolder, string processedFolder, string pdfFolder)
         {
             Host = host;
             Port = port;
@@ -25,6 +26,7 @@ namespace Nop.Plugin.TMB.Helpers
             RequestFolder = requestFolder;
             ResponseFolder = responseFolder;
             ProcessedFolder = processedFolder;
+            PdfFolder = pdfFolder;
         }
         
         public void UploadFile(string filename, string content)
@@ -77,11 +79,13 @@ namespace Nop.Plugin.TMB.Helpers
             return result;
         }
 
-        public string DownloadFile(string filename)
+        public string DownloadFile(string filename, bool isPdf = false)
         {
             var result = string.Empty;
+
+            var uriDownload = (isPdf) ? $"{Host}:{Port}/{PdfFolder}/{filename}" : $"{Host}:{Port}/{ResponseFolder}/{filename}";
             
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"{Host}:{Port}/{ResponseFolder}/{filename}");
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(uriDownload);
             request.Credentials = new NetworkCredential(Username, Password);
             request.EnableSsl = true;
             request.Method = WebRequestMethods.Ftp.DownloadFile;
@@ -97,10 +101,29 @@ namespace Nop.Plugin.TMB.Helpers
             return result;
         }
         
+        public byte[] DownloadInvoicePdf(string filename)
+        {
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"{Host}:{Port}/{PdfFolder}/{filename}");
+            request.Credentials = new NetworkCredential(Username, Password);
+            request.EnableSsl = true;
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+
+            using (var res = (FtpWebResponse) request.GetResponse())
+            {
+                Stream responseStream = res.GetResponseStream();
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    responseStream.CopyTo(ms);
+                    return ms.ToArray();
+                }
+            }
+        }
+        
         public void MoveFileToProcessed(string filename)
         {
             FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"{Host}:{Port}/{ResponseFolder}/{filename}");
             request.Method = WebRequestMethods.Ftp.Rename;
+            request.EnableSsl = true;
             request.Credentials = new NetworkCredential(Username, Password);
             request.RenameTo = $"./{ProcessedFolder}/{filename}";
 

@@ -13,6 +13,7 @@ namespace Nop.Plugin.TMB.Entity
         public string Surname { get; set; }
         public string BusinessName { get; set; }
         public string SdICode { get; set; }
+        public string Email { get; set; }
         public string PEC { get; set; }
         public bool Deleted { get; set; }
         public int? InvoiceRequestStatusId { get; set; }

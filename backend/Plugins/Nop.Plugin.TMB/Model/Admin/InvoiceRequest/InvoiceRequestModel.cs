@@ -13,19 +13,17 @@ namespace Nop.Plugin.TMB.Model.Admin.InvoiceRequest
         [JsonProperty("id")]
         public Guid GuidId { get; set; }
         
-        [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Name")]
         [JsonProperty("name")]
         public string Name { get; set; }
         
-        [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Surname")]
         [JsonProperty("surname")]
         public string Surname { get; set; }
         
-        [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.BusinessName")]
         [JsonProperty("business_name")]
         public string BusinessName { get; set; }
         
-        [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.PEC")]
+        public string Email { get; set; }
+        
         public string PEC { get; set; }
         
         [JsonProperty("transit_codes")]
@@ -55,13 +53,9 @@ namespace Nop.Plugin.TMB.Model.Admin.InvoiceRequest
         [JsonProperty("address")]
         public InvoiceRequestAddressModel InvoiceRequestAddress { get; set; }
         
-        [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.FiscalCode")]
         [JsonProperty("fiscal_id")]
         public InvoiceRequestFiscalIdModel InvoiceRequestFiscalId { get; set; }
 
-        // [Newtonsoft.Json.JsonIgnore]        
-        // public List<InvoiceRequestTransitCodeModel> TransitCodesList { get; set; }
-        
         [Newtonsoft.Json.JsonIgnore]
         public InvoiceRequestSearchModel InvoiceRequestSearchModel { get; set; }
 
@@ -79,17 +73,31 @@ namespace Nop.Plugin.TMB.Model.Admin.InvoiceRequest
     public record InvoiceRequestForGridModel : BaseNopEntityModel
     {
         public Guid GuidId { get; set; }
+        
+        [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Name")]
         public string Name { get; set; }
         
+        [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Surname")]
         public string Surname { get; set; }
         
+        [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.BusinessName")]
         public string BusinessName { get; set; }
 
+        [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.RequestDate")]
         public string RequestDate { get; set; }
+        
+        [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.ResponseDate")]
+        public string ResponseDate { get; set; }
 
+        [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Email")]
+        public string Email { get; set; }
+        
+        [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.PEC")]
         public string PEC { get; set; }
 
         public int? InvoiceRequestStatusId { get; set; }
+        
+        [NopResourceDisplayName(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Status")]
         public string InvoiceRequestStatusDescription { get; set; }
     }
 }

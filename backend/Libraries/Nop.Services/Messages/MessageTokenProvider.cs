@@ -448,6 +448,11 @@ namespace Nop.Services.Messages
                     "%ContactUs.SenderName%",
                     "%ContactUs.Body%"
                 });
+                
+                _allowedTokens.Add(TokenGroupNames.InvoiceResponse, new[]
+                {
+                    "%InvoiceRequestTransitCode.Code%"
+                });
 
                 return _allowedTokens;
             }

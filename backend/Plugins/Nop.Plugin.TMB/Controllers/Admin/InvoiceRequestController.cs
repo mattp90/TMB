@@ -13,11 +13,13 @@ using Nop.Core.Configuration;
 using Nop.Plugin.TMB.Extensions;
 using Nop.Plugin.TMB.Services.InvoiceRequest;
 using Nop.Services.Localization;
-using Nop.Services.Logging;
+using NopLogger = Nop.Services.Logging;
 using Nop.Services.Messages;
 using Nop.Web.Framework.Models.Extensions;
 using Nop.Web.Framework.Mvc.Filters;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+using Microsoft.Extensions.Logging;
+using Nop.Core;
+using Nop.Core.Domain.Messages;
 
 namespace Nop.Plugin.TMB.Controllers.Admin
 {
@@ -26,12 +28,19 @@ namespace Nop.Plugin.TMB.Controllers.Admin
         private readonly AppSettings _appSettings;
         private readonly IPermissionService _permissionService;
         private readonly IInvoiceRequestService _invoiceRequestService;
-        private readonly ICustomerActivityService _customerActivityService;
+        private readonly NopLogger.ICustomerActivityService _customerActivityService;
         private readonly ILocalizationService _localizationService;
         private readonly INotificationService _notificationService;
-        private readonly ILogger _logger;
+        private readonly NopLogger.ILogger _nopLogger;
+        private readonly ILogger<InvoiceRequestController> _logger;
+        private readonly IEmailAccountService _emailAccountService;
+        private readonly EmailAccountSettings _emailAccountSettings;
+        private readonly IMessageTemplateService _messageTemplateService;
+        private readonly IQueuedEmailService _queuedEmailService;
+        private readonly ITokenizer _tokenizer;
 
-        public InvoiceRequestController(AppSettings appSettings, IPermissionService permissionService, IInvoiceRequestService invoiceRequestService, ICustomerActivityService customerActivityService, ILocalizationService localizationService, INotificationService notificationService, ILogger logger)
+        public InvoiceRequestController(AppSettings appSettings, IPermissionService permissionService, IInvoiceRequestService invoiceRequestService, NopLogger.ICustomerActivityService customerActivityService, 
+            ILocalizationService localizationService, INotificationService notificationService, NopLogger.ILogger nopLogger, ILogger<InvoiceRequestController> logger, IEmailAccountService emailAccountService, EmailAccountSettings emailAccountSettings, IMessageTemplateService messageTemplateService, IQueuedEmailService queuedEmailService, ITokenizer tokenizer)
         {
             _permissionService = permissionService;            
             _invoiceRequestService = invoiceRequestService;
@@ -39,12 +48,18 @@ namespace Nop.Plugin.TMB.Controllers.Admin
             _localizationService = localizationService;
             _notificationService = notificationService;
             _logger = logger;
+            _emailAccountService = emailAccountService;
+            _emailAccountSettings = emailAccountSettings;
+            _messageTemplateService = messageTemplateService;
+            _queuedEmailService = queuedEmailService;
+            _tokenizer = tokenizer;
+            _nopLogger = nopLogger;
             _appSettings = appSettings;
         }
 
         public virtual IActionResult Index()
         {
-            Console.WriteLine(_appSettings.FtpConfig.Host);
+            _logger.LogInformation("Enter in InvoiceRequestController");
             return RedirectToAction("List");
         }
 
@@ -115,10 +130,10 @@ namespace Nop.Plugin.TMB.Controllers.Admin
                     var codes = await _invoiceRequestService.GetTransitCodesByIdRequestAsync(item.Id);
                     model.TransitCodes = codes.Select(x => x.Code).ToList();
                     var jsonContent = JsonConvert.SerializeObject(model, Formatting.Indented);
-                    var ftp = new FTPManager(_appSettings.FtpConfig.Host, _appSettings.FtpConfig.Port,_appSettings.FtpConfig.Username,_appSettings.FtpConfig.Password,_appSettings.FtpConfig.RequestFolder,_appSettings.FtpConfig.ResponseFolder, _appSettings.FtpConfig.ProcessedFolder);
+                    var ftp = new FTPManager(_appSettings.FtpConfig.Host, _appSettings.FtpConfig.Port,_appSettings.FtpConfig.Username,_appSettings.FtpConfig.Password,_appSettings.FtpConfig.RequestFolder,_appSettings.FtpConfig.ResponseFolder, _appSettings.FtpConfig.ProcessedFolder, _appSettings.FtpConfig.PdfFolder);
                     ftp.UploadFile($"{item.GuidId}_{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.json", jsonContent);
                     await _invoiceRequestService.UpdateAsync(item);
-                    
+                        
                     //activity log
                     await _customerActivityService.InsertActivityAsync("EditInvoiceRequest",
                         await _localizationService.GetResourceAsync($"{TMB.PLUGIN_NAME_SPACE}.InvoiceRequest.Updated"), item);
@@ -130,7 +145,7 @@ namespace Nop.Plugin.TMB.Controllers.Admin
                 catch (Exception e)
                 {
                     // print error message
-                    await _logger.ErrorAsync($"Error during executing Nop.Plugin.TMB.Controllers.Admin.Edit method for model {model.Id}", e);
+                    await _nopLogger.ErrorAsync($"Error during executing Nop.Plugin.TMB.Controllers.Admin.Edit method for model {model.Id}", e);
                 }
                 
                 return continueEditing ? RedirectToAction("Edit", new { id = item.Id }) : RedirectToAction("List");

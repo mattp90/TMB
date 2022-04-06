@@ -262,5 +262,7 @@ namespace Nop.Core.Domain.Messages
         public const string ContactVendorMessage = "Service.ContactVendor";
 
         #endregion
+        
+        public const string InvoiceResponseMessage = "InvoiceRequest.SendResponse"; 
     }
 }

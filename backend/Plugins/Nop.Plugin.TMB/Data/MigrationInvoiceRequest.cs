@@ -72,22 +72,11 @@ namespace Nop.Plugin.TMB.Data
             };
             _invoiceRequestService.InsertTransitionCodeStateAsync(transitionStateFailure);
             
-            var transitionStateCompleted = new InvoiceRequestTransitCodeStatus()
+            var transitionStateDuplicate = new InvoiceRequestTransitCodeStatus()
             {
-                Description = "Completed"
+                Description = "Duplicate"
             };
-            _invoiceRequestService.InsertTransitionCodeStateAsync(transitionStateCompleted);
-
-            var taskCheckInvoiceResponse =
-                new ScheduleTask
-                {
-                    Name = "Check invoice request answers",
-                    Seconds = 3600,
-                    Type = "Nop.Plugin.TMB.Task.CheckInvoiceResponseTask, Nop.Plugin.TMB",
-                    Enabled = true,
-                    StopOnError = false
-                };
-            _scheduleTaskService.InsertTaskAsync(taskCheckInvoiceResponse);
+            _invoiceRequestService.InsertTransitionCodeStateAsync(transitionStateDuplicate);
         }
     }
 }

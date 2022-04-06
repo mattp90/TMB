@@ -124,35 +124,35 @@
                                         },
                                         ColumnCollection = new List<ColumnProperty>
                                         {
-                                            new(nameof(InvoiceRequestModel.Name))
+                                            new(nameof(InvoiceRequestForGridModel.Name))
                                             {
                                                 Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Name").Text,
                                             },
-                                            new(nameof(InvoiceRequestModel.Surname))
+                                            new(nameof(InvoiceRequestForGridModel.Surname))
                                             {
                                                 Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Surname").Text,
                                             },
-                                            new(nameof(InvoiceRequestModel.BusinessName))
+                                            new(nameof(InvoiceRequestForGridModel.BusinessName))
                                             {
                                                 Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.BusinessName").Text,
                                             },
-                                            // new(nameof(InvoiceRequestModel.FiscalCode))
-                                            // {
-                                            //     Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.FiscalCode").Text,
-                                            // },
-                                            new(nameof(InvoiceRequestModel.PEC))
+                                            new(nameof(InvoiceRequestForGridModel.Email))
                                             {
-                                                Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.PEC").Text,
+                                                Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Email").Text,
                                             },
-                                            new(nameof(InvoiceRequestModel.RequestDate))
+                                            new(nameof(InvoiceRequestForGridModel.RequestDate))
                                             {
                                                 Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.RequestDate").Text,
                                             },
-                                            new(nameof(InvoiceRequestModel.InvoiceRequestStatusDescription))
+                                            new(nameof(InvoiceRequestForGridModel.ResponseDate))
+                                            {
+                                                Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.ResponseDate").Text,
+                                            },
+                                            new(nameof(InvoiceRequestForGridModel.InvoiceRequestStatusDescription))
                                             {
                                                 Title = T(TMB.PLUGIN_NAME_SPACE + ".InvoiceRequest.Status").Text,
                                             },
-                                            new(nameof(InvoiceRequestModel.Id))
+                                            new(nameof(InvoiceRequestForGridModel.Id))
                                             {
                                                 Title = T("Admin.Common.View").Text,
                                                 Width = "100",

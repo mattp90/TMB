@@ -3,6 +3,9 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
 using Nop.Services.Configuration;
 
 namespace Nop.Web
@@ -14,6 +17,7 @@ namespace Nop.Web
         {
             //initialize the host
             using var host = Host.CreateDefaultBuilder(args)
+                
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder => webBuilder
                     .ConfigureAppConfiguration(config =>
@@ -23,6 +27,10 @@ namespace Nop.Web
                             .AddEnvironmentVariables();
                     })
                     .UseStartup<Startup>())
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.AddNLog(hostingContext.Configuration.GetSection("Logging"));
+                })
                 .Build();
 
             //start the program, a task will be completed when the host starts

@@ -134,5 +134,7 @@
         /// Represents tokens with information about contact vendor
         /// </summary>
         public const string ContactVendor = "Contact vendor tokens";
+        
+        public const string InvoiceResponse = "Invoice response tokens";
     }
 }

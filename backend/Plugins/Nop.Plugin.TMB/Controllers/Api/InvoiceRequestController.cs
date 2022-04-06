@@ -73,7 +73,8 @@ namespace Nop.Plugin.TMB.Controllers.Api
                 // Send to FTP folder
                 model.GuidId = entity.GuidId;
                 var jsonContent = JsonConvert.SerializeObject(model, Formatting.Indented);
-                var ftp = new FTPManager(_appSettings.FtpConfig.Host, _appSettings.FtpConfig.Port,_appSettings.FtpConfig.Username,_appSettings.FtpConfig.Password,_appSettings.FtpConfig.RequestFolder,_appSettings.FtpConfig.ResponseFolder, _appSettings.FtpConfig.ProcessedFolder);
+                var ftp = new FTPManager(_appSettings.FtpConfig.Host, _appSettings.FtpConfig.Port,_appSettings.FtpConfig.Username,_appSettings.FtpConfig.Password,_appSettings.FtpConfig.RequestFolder,
+                    _appSettings.FtpConfig.ResponseFolder, _appSettings.FtpConfig.ProcessedFolder, _appSettings.FtpConfig.PdfFolder);
                 ftp.UploadFile($"{entity.GuidId}_{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.json", jsonContent);
                 
                 return ApiReturn(

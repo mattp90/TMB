@@ -9,5 +9,6 @@
         public string RequestFolder { get; set; }
         public string ResponseFolder { get; set; }
         public string ProcessedFolder { get; set; }
+        public string PdfFolder { get; set; }
     }
 }
