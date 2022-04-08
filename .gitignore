@@ -351,3 +351,4 @@ MigrationBackup/
 
 appSettings.json
 dataSettings.json
+.DS_Store
