@@ -111,7 +111,7 @@ namespace Nop.Plugin.TMB.Task
                                 // Get file pdf from ftp server, upload in nop and send mail with attachment
                                 var attach = await UploadPdfInvoiceInNop(transitCode.PdfName);
                                 // Send email to customer
-                                await SendTestEmailAsync( request.Email, transitCode.Code, attach);
+                                await SendEmailAsync( request.Email, transitCode.Code, attach);
                             }
                         }
                     }
@@ -127,7 +127,7 @@ namespace Nop.Plugin.TMB.Task
             }
         }
         
-        public virtual async System.Threading.Tasks.Task<int> SendTestEmailAsync(string toAddress, string transitCode, Download attach, int languageId = 0)
+        public virtual async System.Threading.Tasks.Task<int> SendEmailAsync(string toAddress, string transitCode, Download attach, int languageId = 0)
         {
             var messageTemplate = (await _messageTemplateService.GetMessageTemplatesByNameAsync(MessageTemplateSystemNames.InvoiceResponseMessage)).FirstOrDefault();
             if (messageTemplate == null)
@@ -146,7 +146,6 @@ namespace Nop.Plugin.TMB.Task
             
             //force sending
             messageTemplate.DelayBeforeSend = null;
-
             return await SendNotificationAsync(messageTemplate, emailAccount, languageId, tokens, toAddress, null, attachmentFileName: attach.Filename, attachDownloadId: attach.Id);
         }
         

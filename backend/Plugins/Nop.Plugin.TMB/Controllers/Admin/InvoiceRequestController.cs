@@ -18,8 +18,6 @@ using Nop.Services.Messages;
 using Nop.Web.Framework.Models.Extensions;
 using Nop.Web.Framework.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using Nop.Core;
-using Nop.Core.Domain.Messages;
 
 namespace Nop.Plugin.TMB.Controllers.Admin
 {
@@ -33,14 +31,9 @@ namespace Nop.Plugin.TMB.Controllers.Admin
         private readonly INotificationService _notificationService;
         private readonly NopLogger.ILogger _nopLogger;
         private readonly ILogger<InvoiceRequestController> _logger;
-        private readonly IEmailAccountService _emailAccountService;
-        private readonly EmailAccountSettings _emailAccountSettings;
-        private readonly IMessageTemplateService _messageTemplateService;
-        private readonly IQueuedEmailService _queuedEmailService;
-        private readonly ITokenizer _tokenizer;
-
+        
         public InvoiceRequestController(AppSettings appSettings, IPermissionService permissionService, IInvoiceRequestService invoiceRequestService, NopLogger.ICustomerActivityService customerActivityService, 
-            ILocalizationService localizationService, INotificationService notificationService, NopLogger.ILogger nopLogger, ILogger<InvoiceRequestController> logger, IEmailAccountService emailAccountService, EmailAccountSettings emailAccountSettings, IMessageTemplateService messageTemplateService, IQueuedEmailService queuedEmailService, ITokenizer tokenizer)
+            ILocalizationService localizationService, INotificationService notificationService, NopLogger.ILogger nopLogger, ILogger<InvoiceRequestController> logger)
         {
             _permissionService = permissionService;            
             _invoiceRequestService = invoiceRequestService;
@@ -48,11 +41,6 @@ namespace Nop.Plugin.TMB.Controllers.Admin
             _localizationService = localizationService;
             _notificationService = notificationService;
             _logger = logger;
-            _emailAccountService = emailAccountService;
-            _emailAccountSettings = emailAccountSettings;
-            _messageTemplateService = messageTemplateService;
-            _queuedEmailService = queuedEmailService;
-            _tokenizer = tokenizer;
             _nopLogger = nopLogger;
             _appSettings = appSettings;
         }
@@ -84,8 +72,6 @@ namespace Nop.Plugin.TMB.Controllers.Admin
                 return RedirectToAction("List");
 
             var model = item.ToModel<InvoiceRequestModel>();
-            // model.TransitCodes = (await _invoiceRequestService.GetTransitCodesByIdRequestAsync(item.Id)).Select(x => x.Code).ToList();
-            
             return View(model);
         }
         
