@@ -16,6 +16,7 @@ namespace Nop.Plugin.TMB.Entity
         public string Email { get; set; }
         public string PEC { get; set; }
         public bool Deleted { get; set; }
+        public string Culture { get; set; }
         public int? InvoiceRequestStatusId { get; set; }
         public DateTime? RequestDate { get; set; }
         public DateTime? LastUpdate { get; set; }

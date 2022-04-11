@@ -49,7 +49,9 @@ namespace Nop.Plugin.TMB.Model.Admin.InvoiceRequest
         public DateTime CreatedOnUtc { get; set; }
         [Newtonsoft.Json.JsonIgnore]
         public DateTime UpdatedOnUtc { get; set; }
-        
+
+        public string Culture { get; set; }
+
         [JsonProperty("address")]
         public InvoiceRequestAddressModel InvoiceRequestAddress { get; set; }
         

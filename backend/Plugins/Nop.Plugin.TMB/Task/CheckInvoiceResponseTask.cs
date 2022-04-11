@@ -11,7 +11,9 @@ using Nop.Services.Localization;
 using Nop.Services.Messages;
 using System.Linq;
 using System.Collections.Generic;
+using iTextSharp.text.pdf;
 using Nop.Core;
+using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Media;
 using Nop.Core.Infrastructure;
 using Nop.Plugin.TMB.Entity;
@@ -32,8 +34,9 @@ namespace Nop.Plugin.TMB.Task
         private readonly EmailAccountSettings _emailAccountSettings;
         private readonly IDownloadService _downloadService;
         private readonly INopFileProvider _fileProvider;
+        private readonly ILanguageService _languageService;
         
-        public CheckInvoiceResponseTask(AppSettings appSettings, ILogger<CheckInvoiceResponseTask> logger, IInvoiceRequestService invoiceRequestService, ILocalizationService localizationService, IQueuedEmailService queuedEmailService, ITokenizer tokenizer, IMessageTemplateService messageTemplateService, IEmailAccountService emailAccountService, EmailAccountSettings emailAccountSettings, IDownloadService downloadService, INopFileProvider fileProvider)
+        public CheckInvoiceResponseTask(AppSettings appSettings, ILogger<CheckInvoiceResponseTask> logger, IInvoiceRequestService invoiceRequestService, ILocalizationService localizationService, IQueuedEmailService queuedEmailService, ITokenizer tokenizer, IMessageTemplateService messageTemplateService, IEmailAccountService emailAccountService, EmailAccountSettings emailAccountSettings, IDownloadService downloadService, INopFileProvider fileProvider, ILanguageService languageService)
         {
             _logger = logger;
             _invoiceRequestService = invoiceRequestService;
@@ -45,6 +48,7 @@ namespace Nop.Plugin.TMB.Task
             _emailAccountSettings = emailAccountSettings;
             _downloadService = downloadService;
             _fileProvider = fileProvider;
+            _languageService = languageService;
             _appSettings = appSettings;
         }
 
@@ -110,8 +114,16 @@ namespace Nop.Plugin.TMB.Task
                             {
                                 // Get file pdf from ftp server, upload in nop and send mail with attachment
                                 var attach = await UploadPdfInvoiceInNop(transitCode.PdfName);
+
+                                var languages = await _languageService.GetAllLanguagesAsync();
+                                var languageId = 0;
+                                if (languages.Count(x => x.LanguageCulture.Equals(request.Culture)) > 0)
+                                {
+                                    languageId = languages.FirstOrDefault(x => x.LanguageCulture.Equals(request.Culture)).Id;
+                                }
+
                                 // Send email to customer
-                                await SendEmailAsync( request.Email, transitCode.Code, attach);
+                                await SendEmailAsync( request.Email, transitCode.Code, attach, languageId);
                             }
                         }
                     }

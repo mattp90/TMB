@@ -13,9 +13,7 @@ namespace Nop.Plugin.TMB.Data
         public AdminMapperConfiguration()
         {
             CreateMap<InvoiceRequest, InvoiceRequestModel>()
-                .ForMember(// .ForMember(
-                                           //     dest => dest.TransitCodesList,
-                                           //     opt => opt.MapFrom(src => src.InvoiceRequestTransitCode))
+                .ForMember(
                         dest => dest.InvoiceRequestAddress,
                         opt => opt.MapFrom(src => src.InvoiceRequestAddress))
                 

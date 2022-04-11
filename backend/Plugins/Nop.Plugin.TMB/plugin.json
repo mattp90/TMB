@@ -2,7 +2,7 @@
   "Group": "Principal Plugin",
   "FriendlyName": "TMB Plugin",
   "SystemName": "Nop.Plugin.TMB",
-  "Version": "1.27",
+  "Version": "1.28",
   "SupportedVersions": [ "4.40" ],
   "Author": "Matteo Piazzi",
   "DisplayOrder": 1,
