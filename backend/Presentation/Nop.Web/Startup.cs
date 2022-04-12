@@ -35,6 +35,16 @@ namespace Nop.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureApplicationServices(_configuration, _webHostEnvironment);
+            
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigin",
+                    builder => builder.WithOrigins(
+                            "192.168.178.34:8001")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
         }
 
         /// <summary>
@@ -45,6 +55,8 @@ namespace Nop.Web
         {
             application.ConfigureRequestPipeline();
             application.StartEngine();
+            application.UseCors(options => options.WithOrigins(
+                "192.168.178.34:8001").AllowAnyHeader());
         }
     }
 }
