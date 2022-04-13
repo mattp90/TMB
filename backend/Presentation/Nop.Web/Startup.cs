@@ -40,7 +40,15 @@ namespace Nop.Web
             {
                 options.AddPolicy("AllowOrigin",
                     builder => builder.WithOrigins(
-                            "192.168.178.34:8001")
+                            "http://92.223.223.101",
+                            "https://92.223.223.101",
+                            "http://92.223.223.101:8001",
+                            "https://92.223.223.101:8001",
+                            "http://192.168.178.34",
+                            "http://192.168.178.34:8001",
+                            "https://192.168.178.34:8001",
+                            "https://192.168.178.34:8001"
+                            )
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
@@ -56,7 +64,15 @@ namespace Nop.Web
             application.ConfigureRequestPipeline();
             application.StartEngine();
             application.UseCors(options => options.WithOrigins(
-                "192.168.178.34:8001").AllowAnyHeader());
+                    "http://92.223.223.101",
+                    "https://92.223.223.101",
+                    "http://92.223.223.101:8001",
+                    "https://92.223.223.101:8001",
+                    "http://192.168.178.34",
+                    "http://192.168.178.34:8001",
+                    "https://192.168.178.34:8001",
+                    "https://192.168.178.34:8001"
+                ).AllowAnyHeader());
         }
     }
 }
